@@ -39,7 +39,7 @@ Before each agent invocation, present the agent name and a one-line reason. Wait
 If review agents find issues:
 1. Present the issues to the user
 2. Ask whether to loop back to the Work phase to address them
-3. If yes, return to `02_work/PHASE.md` with the issues as input
+3. If yes, return to `02_work/WORK_PHASE.md` with the issues as input
 4. After fixes, re-run relevant review agents
 
 ## Output
@@ -49,4 +49,4 @@ If review agents find issues:
 
 ## Next Phase
 
-**Compound** (`04_compound/PHASE.md`) — Capture knowledge from this work.
+**Compound** (`04_compound/COMPUND_PHASE.md`) — Capture knowledge from this work.

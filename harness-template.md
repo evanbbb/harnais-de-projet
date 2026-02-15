@@ -1,12 +1,16 @@
 ## Harness
 
 This project uses harnais_de_projet for its agent workflow.
-Harness location: /path/to/harnais_de_projet
+Harness location: docs/harness (local copy)
 
 ### How to use
-- Full workflow: Read /path/to/harnais_de_projet/orchestrator.md
-- Single phase: Read /path/to/harnais_de_projet/{phase}/PHASE.md
-- Specific agent: Read /path/to/harnais_de_projet/{phase}/agents/{name}.md
+- Full workflow: Read docs/harness/orchestrator.md
+- Single phase: Read the phase entry point for the phase you need:
+  - Plan: docs/harness/01_plan/PLAN_PHASE.md
+  - Work: docs/harness/02_work/WORK_PHASE.md
+  - Review: docs/harness/03_review/REVIEW_PHASE.md
+  - Compound: docs/harness/04_compound/COMPUND_PHASE.md
+- Specific agent: Read docs/harness/{phase}/agents/{name}.md (e.g. docs/harness/01_plan/agents/best-practices-researcher.md)
 
 ### Phases
 - `01_plan` — Research, brainstorm, produce a plan
@@ -16,7 +20,7 @@ Harness location: /path/to/harnais_de_projet
 
 ### On session start
 
-1. **Check for harness updates**: Read `AGENT_SKILL_DIRECTORY.md` from the harness location and compare the `Harness version` at the top against the `last_seen_version` below. If the harness version is newer, tell the user: "Harness updated to version [X]. Read AGENT_SKILL_DIRECTORY.md for what's available." Then update `last_seen_version` here to match.
+1. **Check for harness updates**: If docs/harness/AGENT_SKILL_DIRECTORY.md exists, read it and compare the `Harness version` at the top against the `last_seen_version` below. If the harness version is newer, tell the user: "Harness updated to version [X]. Read AGENT_SKILL_DIRECTORY.md for what's available." Then update `last_seen_version` here to match.
 
 2. If the user hasn't given a specific task, read `docs/to-do.md` and suggest the highest-priority item that isn't already in progress. Present it as a suggestion, not an action — wait for the user to confirm before starting work.
 

@@ -2,7 +2,7 @@
 
 **Plan → Work → Review → Compound → Repeat**
 
-harnais_de_projet is a collection of agent specs and skills that implement a compound engineering workflow. It lives separate from any project repo — consuming projects reference it via their `docs/harness.md`.
+harnais_de_projet is a collection of agent specs and skills that implement a compound engineering workflow. It lives separate from any project repo. When applying the harness to a project, the onboarding process copies the orchestrator and phase folders into the project (under `docs/harness/`); the project then references that local copy via `docs/harness.md`.
 
 ### Philosophy
 
@@ -17,12 +17,14 @@ Traditional development accumulates technical debt — every feature adds comple
 
 ### How Consuming Projects Integrate
 
-1. Run the onboarding process described in `harness-init.md`
-2. This creates `docs/harness.md` in the consuming project, pointing back to harnais_de_projet
-3. The project's `CLAUDE.md` includes: `Read docs/harness.md for agent workflow instructions`
-4. Agents and skills are invoked by reading the relevant `.md` file from harnais_de_projet
+1. Run the onboarding process described in `harness-LOAD-THIS.md` (harness init).
+2. Onboarding copies the orchestrator and phase folders from harnais_de_projet into the project at `docs/harness/`, and creates `docs/harness.md` pointing to that local copy.
+3. The project's `CLAUDE.md` (or similar) includes: `Read docs/harness.md for agent workflow instructions`.
+4. Agents and skills are invoked by reading the relevant `.md` file from `docs/harness/` (e.g. `docs/harness/orchestrator.md`, `docs/harness/01_plan/agents/...`).
 
-See `harness-init.md` for full onboarding steps.
+To update the harness in a consuming project, re-copy from harnais_de_projet into `docs/harness/`.
+
+See `harness-LOAD-THIS.md` for full onboarding steps.
 
 ## Folder Structure
 
@@ -53,11 +55,18 @@ harnais_de_projet/
 
 ## Consuming Project Structure
 
-Projects that use harnais_de_projet should have the following docs structure. The `harness-init.md` onboarding process creates this automatically:
+Projects that use harnais_de_projet should have the following docs structure. The `harness-LOAD-THIS.md` onboarding process creates this automatically (including copying the harness into `docs/harness/`):
 
 ```
 docs/
-├── harness.md       # Points to harnais_de_projet, explains how to invoke agents
+├── harness.md       # Points to local docs/harness/, explains how to invoke agents
+├── harness/         # Local copy of orchestrator and phase folders (from onboarding)
+│   ├── orchestrator.md
+│   ├── 01_plan/     # Plan phase (agents, skills)
+│   ├── 02_work/     # Work phase (agents)
+│   ├── 03_review/   # Review phase (agents)
+│   ├── 04_compound/ # Compound phase (skills)
+│   └── AGENT_SKILL_DIRECTORY.md  # optional
 ├── design-rules.md  # Visual/design rules for the project
 ├── to-do.md         # Priority-ordered task list (P1, P2, ...)
 ├── memory/          # Cross-session working memory (bug investigations, context)
@@ -68,7 +77,7 @@ docs/
 
 ### File Descriptions
 
-- **harness.md** — The bridge between the project and harnais_de_projet. Contains the path to the harness and instructions for invoking agents and skills.
+- **harness.md** — The bridge between the project and the harness. Points to the local copy at `docs/harness/` and explains how to invoke agents and skills.
 - **design-rules.md** — Design rules for the project. Updated when visual components change.
 - **to-do.md** — Loose to-do list organized by priority (P1, P2, etc.).
 - **memory/** — Working memory between context windows. Used during bug investigations or multi-session tasks. After a bug is solved, the solution moves to `solutions/`.

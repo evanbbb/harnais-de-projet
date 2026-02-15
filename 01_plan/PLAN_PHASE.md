@@ -51,4 +51,4 @@ A plan file saved to `docs/plans/` in the consuming project. The plan should inc
 
 ## Next Phase
 
-**Work** (`02_work/PHASE.md`) — Execute the plan.
+**Work** (`02_work/WORK_PHASE.md`) — Execute the plan.

@@ -50,6 +50,27 @@ Create empty template files where they don't already exist:
 
 ---
 
+## Step 2b: Copy harness assets
+
+Copy the orchestrator and phase folders from harnais_de_projet into the project so the harness runs from a local copy.
+
+**Source**: The path to harnais_de_projet on this machine (the user must provide this, or it may be known from context).
+
+**Destination**: `docs/harness/` in the consuming project. Create this directory if it does not exist.
+
+**What to copy** (entire trees; preserve subdirectories and filenames):
+
+- `orchestrator.md` → `docs/harness/orchestrator.md`
+- `01_plan/` → `docs/harness/01_plan/` (entire folder: phase file, agents/, skills/)
+- `02_work/` → `docs/harness/02_work/` (phase file, agents/)
+- `03_review/` → `docs/harness/03_review/` (phase file, agents/)
+- `04_compound/` → `docs/harness/04_compound/` (phase file, skills/)
+- `AGENT_SKILL_DIRECTORY.md` → `docs/harness/AGENT_SKILL_DIRECTORY.md` (optional; recommended so the project has a local harness version and catalog)
+
+Confirm with the user before performing the copy. If any destination path already exists (e.g. a previous copy), ask per file or per folder: **overwrite** or **skip**. Do not delete or replace without explicit user confirmation.
+
+---
+
 ## Step 3: Merge Existing Files
 
 Only move files that clearly belong in the `docs/` subdirectories. Do not touch root-level project files like `PROJECT.md`, `README.md`, or `package.json` — these belong at the root and are not part of the harness structure.
@@ -97,9 +118,7 @@ For files that don't map cleanly, skip them. Do not invent new locations or crea
 
 ## Step 4: Configure
 
-Create `docs/harness.md` using the template from `harness-template.md` in harnais_de_projet.
-
-Replace the placeholder path with the actual absolute path to harnais_de_projet on this machine.
+Create `docs/harness.md` using the template from `harness-template.md` in harnais_de_projet. The template points to the local copy at `docs/harness`; no path replacement is needed.
 
 ---
 
@@ -123,7 +142,8 @@ The harness does not dictate which file this goes in — that depends on the use
 
 After completing all steps, confirm:
 - [ ] `docs/` directory exists with all subdirectories
-- [ ] `docs/harness.md` exists and points to the correct harnais_de_projet path
+- [ ] `docs/harness/` exists and contains `orchestrator.md`, `01_plan/`, `02_work/`, `03_review/`, `04_compound/` (and optionally `AGENT_SKILL_DIRECTORY.md`)
+- [ ] `docs/harness.md` exists and points to the local harness at `docs/harness`
 - [ ] No files were moved without user confirmation
 - [ ] Existing documentation was preserved (moved, not deleted)
 

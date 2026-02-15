@@ -30,7 +30,7 @@ Never auto-chain agents. Always wait for confirmation between each one.
 
 **Goal**: Research, brainstorm, and produce a written plan before any code is written.
 
-**Entry point**: `01_plan/PHASE.md`
+**Entry point**: `01_plan/PLAN_PHASE.md`
 
 **Agents to consider** (present each one that's relevant to the task):
 
@@ -62,7 +62,7 @@ Proceed to Work phase? (yes / stop)
 
 **Goal**: Execute the plan step by step. Write code and tests.
 
-**Entry point**: `02_work/PHASE.md`
+**Entry point**: `02_work/WORK_PHASE.md`
 
 **Agents to consider**:
 
@@ -86,7 +86,7 @@ Proceed to Review phase? (yes / stop)
 
 **Goal**: Validate the implementation for correctness, performance, simplicity, and patterns.
 
-**Entry point**: `03_review/PHASE.md`
+**Entry point**: `03_review/REVIEW_PHASE.md`
 
 **Agents to consider** (not all run every time — select based on the work done):
 
@@ -114,7 +114,7 @@ Loop back to Work phase to address these? (yes / skip / stop)
 
 **Goal**: Capture knowledge from this work for future sessions.
 
-**Entry point**: `04_compound/PHASE.md`
+**Entry point**: `04_compound/COMPUND_PHASE.md`
 
 **Skills to consider**:
 

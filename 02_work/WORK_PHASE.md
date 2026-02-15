@@ -39,4 +39,4 @@ Before each agent invocation, present the agent name and a one-line reason. Wait
 
 ## Next Phase
 
-**Review** (`03_review/PHASE.md`) — Validate the implementation.
+**Review** (`03_review/REVIEW_PHASE.md`) — Validate the implementation.
