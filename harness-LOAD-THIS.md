@@ -11,7 +11,7 @@ Read this file when setting up a new project with the harness. Follow each step 
 Read the consuming project's current file structure to understand what exists.
 
 - Check for existing `docs/` directory
-- Check for a root-level project entry point: `CLAUDE.md`, `PROJECT.md`, `README.md`, `.cursorrules`, or similar
+- Identify which root-level project entry point exists (any one of `CLAUDE.md`, `PROJECT.md`, `README.md`, `.cursorrules`, or similar). Only one is needed — do not flag missing alternatives as issues.
 - Note any existing documentation files (ARCHITECTURE.md, CONTRIBUTING.md, etc.)
 - Note any existing plans, solutions, or memory files in non-standard locations
 
@@ -56,7 +56,26 @@ Only move files that clearly belong in the `docs/` subdirectories. Do not touch 
 
 Do not create any files beyond the scaffold templates in Step 2 and the harness config in Step 4. If existing files don't map to the docs structure, leave them where they are.
 
-If the project already has documentation in other locations, present each potential move to the user for confirmation:
+### 3a: Check for conflicts with harness files
+
+Compare the project's existing files against what the harness provides (AGENT_PROCESS.md, AGENT_SKILL_DIRECTORY.md, orchestrator.md, phase files, agent definitions, etc.). If a project file covers the same topic as a harness file, flag it:
+
+```
+Conflict: [project file path]
+Overlaps with harness file: [harness file name]
+Summary: [brief description of what differs]
+
+Options:
+  1. Keep yours — leave the project file as-is; harness version is accessed separately
+  2. Use harness — archive the project file to docs/memory/ and rely on the harness version
+  3. Merge manually — keep both for now; you'll reconcile them later
+```
+
+Wait for the user's decision on each conflict before proceeding.
+
+### 3b: Relocate documentation files
+
+If the project has documentation in other locations that belongs in the `docs/` subdirectories, present each potential move to the user for confirmation:
 
 Common mappings:
 - `ARCHITECTURE.md` → `docs/structure/architecture.md`

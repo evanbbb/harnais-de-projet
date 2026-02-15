@@ -1,3 +1,5 @@
+**Harness version: 1.0**
+
 ## Overview
 
 **Plan → Work → Review → Compound → Repeat**
