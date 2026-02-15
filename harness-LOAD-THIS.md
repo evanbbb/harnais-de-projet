@@ -11,8 +11,8 @@ Read this file when setting up a new project with the harness. Follow each step 
 Read the consuming project's current file structure to understand what exists.
 
 - Check for existing `docs/` directory
-- Check for `CLAUDE.md`
-- Note any existing documentation files (README, ARCHITECTURE.md, CONTRIBUTING.md, etc.)
+- Check for a root-level project entry point: `CLAUDE.md`, `PROJECT.md`, `README.md`, `.cursorrules`, or similar
+- Note any existing documentation files (ARCHITECTURE.md, CONTRIBUTING.md, etc.)
 - Note any existing plans, solutions, or memory files in non-standard locations
 
 Report findings to the user before proceeding.
@@ -52,6 +52,10 @@ Create empty template files where they don't already exist:
 
 ## Step 3: Merge Existing Files
 
+Only move files that clearly belong in the `docs/` subdirectories. Do not touch root-level project files like `PROJECT.md`, `README.md`, or `package.json` — these belong at the root and are not part of the harness structure.
+
+Do not create any files beyond the scaffold templates in Step 2 and the harness config in Step 4. If existing files don't map to the docs structure, leave them where they are.
+
 If the project already has documentation in other locations, present each potential move to the user for confirmation:
 
 Common mappings:
@@ -68,7 +72,7 @@ Proposed: Move to [destination path]
 Move this file? (yes / skip / other location)
 ```
 
-For files that don't map cleanly, ask the user where they belong.
+For files that don't map cleanly, skip them. Do not invent new locations or create new files to accommodate them.
 
 ---
 
@@ -80,15 +84,19 @@ Replace the placeholder path with the actual absolute path to harnais_de_projet 
 
 ---
 
-## Step 5: Update CLAUDE.md
+## Step 5: Ensure Something Points to the Harness
 
-Add the following line to the project's `CLAUDE.md` (create the file if it doesn't exist):
+Check whether any root-level file (found in Step 1) already references `docs/harness.md`. If so, this step is done.
+
+If nothing points to the harness, suggest that the user add the following line to an existing project entry point (`PROJECT.md`, `CLAUDE.md`, `README.md`, etc.):
 
 ```
 Read docs/harness.md for agent workflow instructions.
 ```
 
-If `CLAUDE.md` already exists, append this line in an appropriate location (near other documentation references if they exist).
+If no suitable file exists at all, suggest creating a `PROJECT.md` with a brief project description and the harness reference. Confirm with the user before creating it.
+
+The harness does not dictate which file this goes in — that depends on the user's tools and preferences.
 
 ---
 
@@ -97,7 +105,6 @@ If `CLAUDE.md` already exists, append this line in an appropriate location (near
 After completing all steps, confirm:
 - [ ] `docs/` directory exists with all subdirectories
 - [ ] `docs/harness.md` exists and points to the correct harnais_de_projet path
-- [ ] `CLAUDE.md` references `docs/harness.md`
 - [ ] No files were moved without user confirmation
 - [ ] Existing documentation was preserved (moved, not deleted)
 
