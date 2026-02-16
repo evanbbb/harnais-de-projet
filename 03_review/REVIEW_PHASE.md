@@ -49,4 +49,4 @@ If review agents find issues:
 
 ## Next Phase
 
-**Compound** (`04_compound/COMPUND_PHASE.md`) — Capture knowledge from this work.
+**Compound** (`04_compound/COMPOUND_PHASE.md`) — Capture knowledge from this work.

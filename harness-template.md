@@ -9,7 +9,7 @@ Harness location: docs/harness (local copy)
   - Plan: docs/harness/01_plan/PLAN_PHASE.md
   - Work: docs/harness/02_work/WORK_PHASE.md
   - Review: docs/harness/03_review/REVIEW_PHASE.md
-  - Compound: docs/harness/04_compound/COMPUND_PHASE.md
+  - Compound: docs/harness/04_compound/COMPOUND_PHASE.md
 - Specific agent: Read docs/harness/{phase}/agents/{name}.md (e.g. docs/harness/01_plan/agents/best-practices-researcher.md)
 
 ### Phases

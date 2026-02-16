@@ -114,7 +114,7 @@ Loop back to Work phase to address these? (yes / skip / stop)
 
 **Goal**: Capture knowledge from this work for future sessions.
 
-**Entry point**: `04_compound/COMPUND_PHASE.md`
+**Entry point**: `04_compound/COMPOUND_PHASE.md`
 
 **Skills to consider**:
 
@@ -123,7 +123,7 @@ Loop back to Work phase to address these? (yes / skip / stop)
 | `compound-docs` | A non-trivial problem was solved — document it | `04_compound/skills/compound-docs/SKILL.md` |
 | `document-review` | Documentation was created — review it for quality | `04_compound/skills/document-review/SKILL.md` |
 
-**Phase output**: Solution documentation in `docs/solutions/`.
+**Phase output**: Solution documentation in `docs/solutions/`. When new features were added, structure docs in `docs/structure/` should also be updated.
 
 ---
 

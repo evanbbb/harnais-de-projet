@@ -9,6 +9,7 @@ Capture knowledge from the completed work so future sessions benefit. Document s
 - Completed, reviewed implementation
 - The conversation history (problems encountered, solutions found)
 - Existing docs in `docs/solutions/`
+- Existing structure docs in `docs/structure/`
 
 ## Skills Available
 
@@ -37,16 +38,33 @@ Not every task produces documentation. Compound when:
 - Multiple investigation attempts were needed before finding the solution
 - A new pattern or convention was established
 - A gotcha or pitfall was discovered
+- **New features were added** — update structure docs to reflect architectural changes
 
 Skip compounding for:
 - Trivial fixes (typos, obvious bugs)
 - Work that produced no new insights
+
+## Structure Documentation
+
+**When new features are added**, update structure docs in `docs/structure/`:
+
+- **New components/modules**: Create new structure docs or append to existing component documentation
+- **Modified components**: Update existing structure docs to reflect changes
+- **New architectural patterns**: Document in appropriate structure doc
+- **Changed file organization**: Update structure docs to reflect new directory/file structure
+
+**How to update:**
+- Check `docs/structure/` for existing docs related to the feature area
+- If a relevant doc exists: append new information or update relevant sections
+- If no relevant doc exists: create a new structure doc following project conventions
+- Ensure structure docs accurately reflect the current state of the codebase
 
 ## Output
 
 - Solution documentation in `docs/solutions/[category]/`
 - Updated cross-references between related solutions
 - Optionally, new entries in critical patterns
+- **Updated structure docs in `docs/structure/`** (when new features were added)
 
 ## Next Phase
 
