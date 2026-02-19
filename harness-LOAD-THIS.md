@@ -29,6 +29,20 @@ mkdir -p docs/memory docs/plans docs/solutions docs/structure
 
 Create empty template files where they don't already exist:
 
+**docs/design-rules.md** (only if it doesn't already exist):
+
+Ask the user to choose:
+
+1. **Use harness design rules** — Copy `design-rules.md` from harnais_de_projet to `docs/design-rules.md`. The harness provides layout, typography, colors, cards, and other UI conventions.
+2. **Use blank template** — Create `docs/design-rules.md` with:
+
+```markdown
+# Design Rules
+
+<!-- Project-specific visual and design rules go here -->
+<!-- Update this file when design components change -->
+```
+
 **docs/to-do.md**:
 ```markdown
 # To Do
@@ -52,7 +66,6 @@ Copy the orchestrator and phase folders from harnais_de_projet into the project 
 
 **What to copy** (entire trees; preserve subdirectories and filenames):
 
-- `design-rules.md` → `docs/design-rules.md` (only if `docs/design-rules.md` doesn't already exist — harness provides default design rules)
 - `orchestrator.md` → `docs/harness/orchestrator.md`
 - `01_plan/` → `docs/harness/01_plan/` (entire folder: phase file, agents/, skills/)
 - `02_work/` → `docs/harness/02_work/` (phase file, agents/)
@@ -135,7 +148,7 @@ The harness does not dictate which file this goes in — that depends on the use
 
 After completing all steps, confirm:
 - [ ] `docs/` directory exists with all subdirectories
-- [ ] `docs/design-rules.md` exists (copied from harness, or already present)
+- [ ] `docs/design-rules.md` exists (harness design rules, blank template, or already present)
 - [ ] `docs/harness/` exists and contains `orchestrator.md`, `01_plan/`, `02_work/`, `03_review/`, `04_compound/` (and optionally `AGENT_SKILL_DIRECTORY.md`)
 - [ ] `docs/harness.md` exists and points to the local harness at `docs/harness`
 - [ ] No files were moved without user confirmation
