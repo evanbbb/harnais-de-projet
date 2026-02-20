@@ -22,7 +22,7 @@ Traditional development accumulates technical debt — every feature adds comple
 3. The project's `CLAUDE.md` (or similar) includes: `Read docs/harness.md for agent workflow instructions`.
 4. Agents and skills are invoked by reading the relevant `.md` file from `docs/harness/` (e.g. `docs/harness/orchestrator.md`, `docs/harness/01_plan/agents/...`).
 
-To update the harness in a consuming project, re-copy from harnais_de_projet into `docs/harness/`.
+To update the harness in a consuming project, follow `harness-CHECK-4-UPDATES.md` — it walks through copying new/updated agents and skills, design rules, and other harness files, with confirmation before each change.
 
 See `harness-LOAD-THIS.md` for full onboarding steps.
 

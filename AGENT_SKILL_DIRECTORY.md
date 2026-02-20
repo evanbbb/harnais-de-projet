@@ -1,4 +1,4 @@
-**Harness version: 1.0**
+**Harness version: 1.1**
 
 ## Overview
 
