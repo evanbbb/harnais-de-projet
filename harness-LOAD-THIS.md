@@ -10,6 +10,21 @@ Read this file when setting up a new project with the harness. Follow each step 
 
 Read the consuming project's current file structure to understand what exists.
 
+**Project lifecycle question**: Does this project need project-level lifecycle management (roadmap, requirements traceability, phased execution)? Ask the user:
+
+```
+Does this project need project lifecycle management?
+
+1. Yes — Set up .planning/ with project definition, requirements, roadmap, and phased execution
+2. No — Use task-level workflow only (Plan → Work → Review → Compound per task)
+
+Which? (1 / 2)
+```
+
+If **yes**: After completing all steps below, also copy `00_init/`, `05_session/`, and `project-orchestrator.md` to `docs/harness/`, and run the `00_init/INIT_PHASE.md` to create `.planning/`.
+
+If **no**: Proceed with the standard setup below. The project lifecycle can be added later.
+
 - Check for existing `docs/` directory
 - Identify which root-level project entry point exists (any one of `CLAUDE.md`, `PROJECT.md`, `README.md`, `.cursorrules`, or similar). Only one is needed — do not flag missing alternatives as issues.
 - Note any existing documentation files (ARCHITECTURE.md, CONTRIBUTING.md, etc.)
@@ -67,11 +82,17 @@ Copy the orchestrator and phase folders from harnais_de_projet into the project 
 **What to copy** (entire trees; preserve subdirectories and filenames):
 
 - `orchestrator.md` → `docs/harness/orchestrator.md`
-- `01_plan/` → `docs/harness/01_plan/` (entire folder: phase file, agents/, skills/)
-- `02_work/` → `docs/harness/02_work/` (phase file, agents/)
-- `03_review/` → `docs/harness/03_review/` (phase file, agents/)
-- `04_compound/` → `docs/harness/04_compound/` (phase file, skills/)
+- `01_plan/` → `docs/harness/01_plan/` (entire folder: phase file, agents/, skills/, references/)
+- `02_work/` → `docs/harness/02_work/` (phase file, agents/, references/)
+- `03_review/` → `docs/harness/03_review/` (phase file, agents/, references/)
+- `04_compound/` → `docs/harness/04_compound/` (phase file, skills/, references/)
 - `AGENT_SKILL_DIRECTORY.md` → `docs/harness/AGENT_SKILL_DIRECTORY.md` (optional; recommended so the project has a local harness version and catalog)
+
+**If project lifecycle was selected in Step 1** (also copy):
+
+- `project-orchestrator.md` → `docs/harness/project-orchestrator.md`
+- `00_init/` → `docs/harness/00_init/` (entire folder: phase file, agents/, skills/, references/)
+- `05_session/` → `docs/harness/05_session/` (session management, references/)
 
 Confirm with the user before performing the copy. If any destination path already exists (e.g. a previous copy), ask per file or per folder: **overwrite** or **skip**. Do not delete or replace without explicit user confirmation.
 
@@ -153,5 +174,9 @@ After completing all steps, confirm:
 - [ ] `docs/harness.md` exists and points to the local harness at `docs/harness`
 - [ ] No files were moved without user confirmation
 - [ ] Existing documentation was preserved (moved, not deleted)
+
+**If project lifecycle was selected:**
+- [ ] `docs/harness/` also contains `project-orchestrator.md`, `00_init/`, `05_session/`
+- [ ] `.planning/` exists with PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md, config.json (created by running 00_init)
 
 Report the final state to the user.

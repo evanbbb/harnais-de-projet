@@ -24,8 +24,9 @@ Run this agent? (yes / skip / stop)
 |-------|------------|------|
 | `implementation-executor` | A plan exists and needs to be implemented step by step | `agents/implementation-executor.md` |
 | `test-writer` | Implementation is complete and needs test coverage | `agents/test-writer.md` |
+| `debugger` | Implementation hits unexpected failures — scientific hypothesis-driven debugging | `agents/debugger.md` |
 
-Typical flow: run `implementation-executor` first, then `test-writer`.
+Typical flow: run `implementation-executor` first, then `test-writer`. Use `debugger` when unexpected failures occur during either.
 
 ## Confirmation Gate
 
@@ -35,11 +36,33 @@ Before each agent invocation, present the agent name and a one-line reason. Wait
 
 After each agent runs and produces actionable output (e.g., code to apply, failing tests, suggested fixes), ask the user if they want to implement or address those items before moving to the next agent. Do not advance until they have implemented or explicitly skipped.
 
+## Deviation Rules
+
+When the implementation encounters unexpected situations, follow the 4 deviation rules in `references/deviation-rules.md`:
+1. Auto-fix blocking issues (broken code, null crashes)
+2. Add missing critical elements (security, error handling)
+3. Fix environmental blockers (missing deps, wrong paths)
+4. Escalate architectural decisions to the user
+
+Max 3 auto-fix attempts per task.
+
+## Completion Summary
+
+After plan execution, produce a SUMMARY.md following `references/summary-format.md`. Save to `docs/plans/summaries/[plan-name]-summary.md`.
+
+## Git Conventions
+
+Follow atomic commit conventions in `references/git-conventions.md`:
+- One commit per completed task
+- Conventional format: `{type}({scope}): {description}`
+- Commit after each task's verify command passes
+
 ## Output
 
 - Implemented code following the plan
 - Tests covering the implementation
 - Updated plan file with completed steps checked off
+- Completion summary in `docs/plans/summaries/`
 
 ## Next Phase
 

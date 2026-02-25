@@ -66,9 +66,10 @@ For each item below, **ask the user** before copying or overwriting. Do not batc
 
 For each agent in harnais_de_projet:
 
-- **01_plan/agents/** — `best-practices-researcher.md`, `framework-docs-researcher.md`, `repo-research-analyst.md`, `spec-flow-analyzer.md`
-- **02_work/agents/** — `implementation-executor.md`, `test-writer.md`
-- **03_review/agents/** — `bug-reproduction-validator.md`, `code-simplicity-reviewer.md`, `pattern-recognition-specialist.md`, `performance-oracle.md`
+- **00_init/agents/** — `project-questioner.md`, `codebase-mapper.md`
+- **01_plan/agents/** — `best-practices-researcher.md`, `framework-docs-researcher.md`, `plan-checker.md`, `repo-research-analyst.md`, `research-synthesizer.md`, `spec-flow-analyzer.md`
+- **02_work/agents/** — `debugger.md`, `implementation-executor.md`, `test-writer.md`
+- **03_review/agents/** — `bug-reproduction-validator.md`, `code-simplicity-reviewer.md`, `pattern-recognition-specialist.md`, `performance-oracle.md`, `verification-agent.md`
 
 **If new** (exists in source, missing in project):
 - **Prompt**: "Copy new agent `[name].md` to `docs/harness/[phase]/agents/[name].md`? (yes / skip)"
@@ -84,8 +85,9 @@ Confirm each agent separately unless the user says "update all agents."
 
 Skills include their folder: `SKILL.md` plus any `assets/`, `references/`, or other subdirectories. Copy or overwrite the **entire skill folder**.
 
-**01_plan/skills/** — `brainstorming/`  
-**04_compound/skills/** — `compound-docs/`, `document-review/`
+**00_init/skills/** — `project-setup/`
+**01_plan/skills/** — `brainstorming/`
+**04_compound/skills/** — `compound-docs/`, `document-review/`, `milestone-retrospective/`
 
 **If new** (skill folder exists in source, missing in project):
 - **Prompt**: "Copy new skill `[skill-name]/` (entire folder) to `docs/harness/[phase]/skills/[skill-name]/`? (yes / skip)"
@@ -138,6 +140,35 @@ The project's `docs/harness.md` may have customizations (e.g. project-specific n
 
 ---
 
+### 3h. Project orchestrator and session management
+
+If the consuming project uses project lifecycle management:
+
+| Source | Destination | Action |
+|--------|-------------|--------|
+| `project-orchestrator.md` | `docs/harness/project-orchestrator.md` | Overwrite if updated |
+| `00_init/` | `docs/harness/00_init/` | Copy/overwrite entire folder |
+| `05_session/` | `docs/harness/05_session/` | Copy/overwrite entire folder |
+
+**Prompt**: "Update project lifecycle files (project-orchestrator, 00_init, 05_session)? (yes / skip)"
+
+---
+
+### 3i. References (new and updated)
+
+Reference files in `*/references/` directories. These are standalone docs that agents and skills point to.
+
+- **00_init/references/** — `questioning-methodology.md`, `model-profiles.md`
+- **01_plan/references/** — `plan-format.md`, `plan-checker-dimensions.md`
+- **02_work/references/** — `deviation-rules.md`, `summary-format.md`, `git-conventions.md`
+- **03_review/references/** — `verification-levels.md`, `stub-indicators.md`
+- **04_compound/references/** — `retrospective-format.md`
+- **05_session/references/** — `continue-here-format.md`
+
+**Prompt**: "Update reference files? (yes / skip / list which ones)"
+
+---
+
 ## Step 4: Post-update
 
 After applying the user's chosen updates:
@@ -147,14 +178,27 @@ After applying the user's chosen updates:
 
 ---
 
+## Step 5: Adopt Project Lifecycle (optional)
+
+Only applicable when `00_init/` was newly copied during this update (i.e., the project is upgrading from a version that didn't include lifecycle management).
+
+**Prompt**: "The new harness version includes project lifecycle management. Would you like to set it up for this project? This creates `.planning/` with project definition, requirements, and roadmap. (yes / skip)"
+
+- **If yes**: "Run `docs/harness/00_init/INIT_PHASE.md` to set up the project lifecycle."
+- **If skip**: "You can set it up later by reading `docs/harness/00_init/INIT_PHASE.md`."
+
+---
+
 ## Summary
 
 | Category | Source(s) | Confirm before each |
 |----------|-----------|---------------------|
 | Orchestrator | `orchestrator.md` | yes |
-| Phase files | `*_PHASE.md` per phase | yes |
+| Project orchestrator | `project-orchestrator.md` | yes |
+| Phase files | `*_PHASE.md` per phase (00-05) | yes |
 | Agents | `*/agents/*.md` | yes, per agent |
 | Skills | `*/skills/*/` (whole folders) | yes, per skill |
+| References | `*/references/*.md` | yes (per file or group) |
 | Catalog | `AGENT_SKILL_DIRECTORY.md` | yes |
 | Design rules | `design-rules.md` | yes (overwrite / merge / skip) |
 | Harness config | `harness-template.md` → `docs/harness.md` | yes (version only / full / skip) |

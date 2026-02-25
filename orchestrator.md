@@ -6,6 +6,17 @@ Run the full **Plan → Work → Review → Compound** loop for a task.
 
 You will guide the user through all four phases, selecting relevant agents for each. **Before running any agent, you must present it and wait for the user to approve, skip, or stop.**
 
+## Project Awareness
+
+If `.planning/` exists in the project root, this task loop is running within the project lifecycle:
+
+- Read `.planning/STATE.md` and `.planning/ROADMAP.md` to understand the current phase and its goals
+- Plans should reference relevant REQ-IDs from `.planning/REQUIREMENTS.md`
+- After each plan completes, update `.planning/STATE.md` with progress
+- When `config.json` has `parallelization.enabled: true`, the `project-orchestrator.md` handles wave-based execution — this orchestrator runs individual plans within that structure
+
+If `.planning/` does not exist, this orchestrator runs standalone as a task-level loop. No project artifacts are required.
+
 ## Confirmation Gate
 
 Every agent invocation follows this pattern:
@@ -52,6 +63,8 @@ Only after the user has implemented (or explicitly skipped) may you present the 
 | `best-practices-researcher` | Need external patterns or examples for the approach | `01_plan/agents/best-practices-researcher.md` |
 | `framework-docs-researcher` | Working with a framework/library and need docs | `01_plan/agents/framework-docs-researcher.md` |
 | `spec-flow-analyzer` | Need to map user flows or find spec gaps | `01_plan/agents/spec-flow-analyzer.md` |
+| `plan-checker` | A plan has been drafted and needs validation before execution | `01_plan/agents/plan-checker.md` |
+| `research-synthesizer` | Multiple research agents ran — combine their outputs | `01_plan/agents/research-synthesizer.md` |
 
 **Skills to consider**:
 
@@ -82,6 +95,7 @@ Proceed to Work phase? (yes / stop)
 |-------|------------|------|
 | `implementation-executor` | A plan exists and needs to be implemented | `02_work/agents/implementation-executor.md` |
 | `test-writer` | Implementation is done and needs test coverage | `02_work/agents/test-writer.md` |
+| `debugger` | Implementation hits unexpected failures that aren't obvious from the error | `02_work/agents/debugger.md` |
 
 **Phase output**: Implemented code with tests.
 
@@ -104,6 +118,7 @@ Proceed to Review phase? (yes / stop)
 
 | Agent | When to use | Path |
 |-------|------------|------|
+| `verification-agent` | After any implementation — first reviewer, checks existence, stubs, wiring, functionality | `03_review/agents/verification-agent.md` |
 | `code-simplicity-reviewer` | After any implementation — check for over-engineering | `03_review/agents/code-simplicity-reviewer.md` |
 | `pattern-recognition-specialist` | Check that code follows project patterns | `03_review/agents/pattern-recognition-specialist.md` |
 | `performance-oracle` | Implementation touches data processing, queries, or scale-sensitive code | `03_review/agents/performance-oracle.md` |
@@ -140,6 +155,7 @@ Do not present the next agent until the user has implemented or skipped.
 |-------|------------|------|
 | `compound-docs` | A non-trivial problem was solved — document it | `04_compound/skills/compound-docs/SKILL.md` |
 | `document-review` | Documentation was created — review it for quality | `04_compound/skills/document-review/SKILL.md` |
+| `milestone-retrospective` | A roadmap phase is complete — retrospective and state update | `04_compound/skills/milestone-retrospective/SKILL.md` |
 
 **Phase output**: Solution documentation in `docs/solutions/`. When new features were added, structure docs in `docs/structure/` should also be updated.
 

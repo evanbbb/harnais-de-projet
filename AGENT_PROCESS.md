@@ -4,6 +4,29 @@
 
 harnais_de_projet is a collection of agent specs and skills that implement a compound engineering workflow. It lives separate from any project repo. When applying the harness to a project, the onboarding process copies the orchestrator and phase folders into the project (under `docs/harness/`); the project then references that local copy via `docs/harness.md`.
 
+### Two-Layer Orchestration
+
+The harness operates at two levels:
+
+1. **Task Level** (existing) — `orchestrator.md` runs Plan → Work → Review → Compound for a single unit of work. This works standalone without any project artifacts.
+
+2. **Project Level** (optional) — `project-orchestrator.md` wraps the task loop with phase sequencing from a ROADMAP.md. It manages `.planning/` artifacts, milestone tracking, and cross-phase coordination.
+
+```
+PROJECT LIFECYCLE (project-orchestrator.md)
+  00_init/  →  project setup, questioning, codebase mapping
+  ↓
+  For each ROADMAP phase:
+    TASK LOOP (orchestrator.md)
+      01_plan/ → 02_work/ → 03_review/ → 04_compound/
+    ↓
+  Milestone retrospective
+  ↓
+  Next phase or PROJECT COMPLETE
+```
+
+Projects can enter at either level — the task loop works standalone without `.planning/`.
+
 ### Philosophy
 
 Each unit of engineering work should make subsequent units easier, not harder.
@@ -30,22 +53,35 @@ See `harness-LOAD-THIS.md` for full onboarding steps.
 
 ```
 harnais_de_projet/
-├── orchestrator.md           # Master prompt — runs the full Plan→Work→Review→Compound loop
-├── harness-init.md           # Onboarding instructions for new projects
-├── harness-template.md       # Template for consuming project's docs/harness.md
-├── 01_plan/                  # Planning phase — research, brainstorm, spec out work
-│   ├── PHASE.md              # Entry point for running just this phase
-│   ├── agents/               # Autonomous research and analysis prompts
-│   └── skills/               # Step-by-step planning processes
-├── 02_work/                  # Work phase — execute plans, write code and tests
-│   ├── PHASE.md
-│   └── agents/
-├── 03_review/                # Review phase — validate quality, catch issues
-│   ├── PHASE.md
-│   └── agents/
-└── 04_compound/              # Compound phase — capture knowledge for reuse
-    ├── PHASE.md
-    └── skills/
+├── orchestrator.md              # Task-level loop — Plan→Work→Review→Compound
+├── project-orchestrator.md      # Project-level loop — phase sequencing from ROADMAP.md
+├── harness-LOAD-THIS.md         # Onboarding instructions for new projects
+├── harness-template.md          # Template for consuming project's docs/harness.md
+├── 00_init/                     # Project lifecycle initialization (optional)
+│   ├── INIT_PHASE.md
+│   ├── agents/                  # project-questioner, codebase-mapper
+│   ├── skills/                  # project-setup (creates .planning/)
+│   └── references/              # questioning-methodology, model-profiles
+├── 01_plan/                     # Planning phase — research, brainstorm, spec out work
+│   ├── PLAN_PHASE.md
+│   ├── agents/                  # Research agents + plan-checker, research-synthesizer
+│   ├── skills/                  # brainstorming
+│   └── references/              # plan-format, plan-checker-dimensions
+├── 02_work/                     # Work phase — execute plans, write code and tests
+│   ├── WORK_PHASE.md
+│   ├── agents/                  # implementation-executor, test-writer, debugger
+│   └── references/              # deviation-rules, summary-format, git-conventions
+├── 03_review/                   # Review phase — validate quality, catch issues
+│   ├── REVIEW_PHASE.md
+│   ├── agents/                  # Review agents + verification-agent
+│   └── references/              # verification-levels, stub-indicators
+├── 04_compound/                 # Compound phase — capture knowledge for reuse
+│   ├── COMPOUND_PHASE.md
+│   ├── skills/                  # compound-docs, document-review, milestone-retrospective
+│   └── references/              # retrospective-format
+└── 05_session/                  # Cross-session management
+    ├── SESSION_MANAGEMENT.md
+    └── references/              # continue-here-format
 ```
 
 ### Agents vs Skills
@@ -58,22 +94,38 @@ harnais_de_projet/
 Projects that use harnais_de_projet should have the following docs structure. The `harness-LOAD-THIS.md` onboarding process creates this automatically (including copying the harness into `docs/harness/`):
 
 ```
-docs/
-├── harness.md       # Points to local docs/harness/, explains how to invoke agents
-├── harness/         # Local copy of orchestrator and phase folders (from onboarding)
-│   ├── orchestrator.md
-│   ├── 01_plan/     # Plan phase (agents, skills)
-│   ├── 02_work/     # Work phase (agents)
-│   ├── 03_review/   # Review phase (agents)
-│   ├── 04_compound/ # Compound phase (skills)
-│   └── AGENT_SKILL_DIRECTORY.md  # optional
-├── design-rules.md  # Visual/design rules for the project
-├── to-do.md         # Priority-ordered task list (P1, P2, ...)
-├── memory/          # Cross-session working memory (bug investigations, context)
-├── plans/           # Feature plans generated by planning agents
-├── solutions/       # Solved problems documented by compound-docs skill
-└── structure/       # Repo structure documentation (architecture, components)
+project-root/
+├── .planning/                    # Project lifecycle (optional — created by 00_init)
+│   ├── PROJECT.md
+│   ├── REQUIREMENTS.md
+│   ├── ROADMAP.md
+│   ├── STATE.md
+│   ├── config.json
+│   ├── milestones/               # Archived milestone retrospectives
+│   ├── research/                 # Domain research outputs
+│   └── phases/                   # Per-phase artifacts
+├── docs/
+│   ├── harness.md                # Points to local docs/harness/
+│   ├── harness/                  # Local copy of orchestrator and phase folders
+│   │   ├── orchestrator.md
+│   │   ├── project-orchestrator.md
+│   │   ├── 00_init/              # Project initialization (optional)
+│   │   ├── 01_plan/              # Plan phase (agents, skills, references)
+│   │   ├── 02_work/              # Work phase (agents, references)
+│   │   ├── 03_review/            # Review phase (agents, references)
+│   │   ├── 04_compound/          # Compound phase (skills, references)
+│   │   ├── 05_session/           # Session management
+│   │   └── AGENT_SKILL_DIRECTORY.md
+│   ├── design-rules.md
+│   ├── to-do.md
+│   ├── memory/                   # Cross-session memory + continue-here files
+│   ├── plans/
+│   │   └── summaries/            # Completion summaries from work phase
+│   ├── solutions/
+│   └── structure/
 ```
+
+When `.planning/` exists, the `project-orchestrator.md` drives phase-by-phase execution. When it doesn't, `orchestrator.md` runs standalone task loops. See `config.json` template in `00_init/skills/project-setup/templates/` for workflow configuration options.
 
 ### File Descriptions
 

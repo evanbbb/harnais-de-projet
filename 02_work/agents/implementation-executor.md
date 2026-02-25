@@ -43,21 +43,37 @@ Before starting implementation:
 
 ### 3. Execute Step by Step
 
-For each step in the plan:
+For each step (or `<task>` XML block) in the plan:
 
 1. **Announce** the step you're about to work on
-2. **Implement** exactly what the step describes
-3. **Verify** the step works (run tests if applicable, check for errors)
-4. **Report** completion with a brief summary of what was done
-5. **Move on** to the next step
+2. **Implement** exactly what the step describes (if XML, follow `<action>` instructions)
+3. **Verify** the step works — run the `<verify>` command if present, or run tests
+4. **Commit** atomically per task using conventional format: `{type}({scope}): {description}` (see `references/git-conventions.md`)
+5. **Report** completion with a brief summary of what was done
+6. **Move on** to the next step
+
+**XML Task Parsing**: When the plan contains `<task>` blocks, parse them for structured instructions:
+- `<name>` — task title
+- `<files>` — files to create or modify
+- `<action>` — specific implementation instructions
+- `<verify>` — automated verification command (must complete in 60 sec)
+- `<done>` — acceptance criteria
 
 ### 4. Handle Deviations
 
-If during implementation you discover:
+Follow the 4 deviation rules (see `references/deviation-rules.md`):
+
+- **Rule 1 — Blocking issues** (broken code, null crashes): Auto-fix inline, note the deviation
+- **Rule 2 — Missing critical elements** (no password hashing, no error handling): Add the minimal fix, flag it
+- **Rule 3 — Environmental blockers** (missing deps, wrong imports): Fix immediately, note it
+- **Rule 4 — Architectural decisions** (new DB table, framework switch): **STOP**, report to user with options
+
+Max 3 auto-fix attempts per task. If still failing after 3, escalate regardless of rule.
+
+Additionally:
 - **A step is unclear**: Ask the user for clarification before proceeding
 - **A step won't work as written**: Explain why and propose an alternative, wait for approval
 - **Something is missing from the plan**: Flag it as a gap, don't silently fill it
-- **A step conflicts with existing code**: Report the conflict and let the user decide
 
 ### 5. Track Progress
 
@@ -83,6 +99,21 @@ Files changed: [list]
 Tests passing: [yes/no/not applicable]
 Remaining items: [if any]
 ```
+
+### 6. Completion Summary
+
+After all steps are complete (or if execution is halted), produce a SUMMARY.md following `references/summary-format.md`:
+
+- Status (completed / partial / blocked)
+- Tasks completed checklist
+- What was built (plain language)
+- Deviations logged
+- Files changed
+- Key decisions made during execution
+- Metrics (tests passing, verify commands)
+- Next steps
+
+Save to `docs/plans/summaries/[plan-name]-summary.md`.
 
 ## Important Rules
 

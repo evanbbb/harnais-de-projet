@@ -26,6 +26,7 @@ Run this skill? (yes / skip / stop)
 |-------|------------|------|
 | `compound-docs` | A non-trivial problem was solved during this work — document it for future reference | `skills/compound-docs/SKILL.md` |
 | `document-review` | Documentation was created (plan, solution doc) — review it for clarity and completeness | `skills/document-review/SKILL.md` |
+| `milestone-retrospective` | A roadmap phase is complete — review accomplishments, check success criteria, capture lessons | `skills/milestone-retrospective/SKILL.md` |
 
 ## Confirmation Gate
 

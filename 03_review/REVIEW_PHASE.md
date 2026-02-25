@@ -23,6 +23,7 @@ Run this agent? (yes / skip / stop)
 
 | Agent | When to use | Path |
 |-------|------------|------|
+| `verification-agent` | After any implementation — **recommended first reviewer**. Checks file existence, stub detection, wiring, and functionality across 4 levels | `agents/verification-agent.md` |
 | `code-simplicity-reviewer` | After any implementation — check for over-engineering and YAGNI violations | `agents/code-simplicity-reviewer.md` |
 | `pattern-recognition-specialist` | Verify the code follows project conventions and patterns | `agents/pattern-recognition-specialist.md` |
 | `performance-oracle` | Implementation touches data processing, queries, or scale-sensitive code | `agents/performance-oracle.md` |

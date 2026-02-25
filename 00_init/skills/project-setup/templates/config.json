@@ -1,0 +1,27 @@
+{
+  "mode": "interactive",
+  "depth": "standard",
+  "workflow": {
+    "research": true,
+    "plan_check": true,
+    "verifier": true,
+    "auto_advance": false,
+    "commit_docs": true
+  },
+  "parallelization": {
+    "enabled": false,
+    "max_concurrent_agents": 3,
+    "min_plans_for_parallel": 2
+  },
+  "git": {
+    "branching_strategy": "none"
+  },
+  "model_profile": "balanced",
+  "confirmation_gates": {
+    "project_confirmation": true,
+    "phase_verification": true,
+    "roadmap_approval": true,
+    "plan_execution_review": true,
+    "transition_confirmation": true
+  }
+}
