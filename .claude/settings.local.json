@@ -19,7 +19,12 @@
       "WebFetch(domain:codelabs.developers.google.com)",
       "Bash(claude plugin:*)",
       "Bash(head:*)",
-      "Bash(npx get-shit-done-cc@latest:*)"
+      "Bash(npx get-shit-done-cc@latest:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:platform.moonshot.ai)",
+      "Bash(source:*)"
     ]
   }
 }
