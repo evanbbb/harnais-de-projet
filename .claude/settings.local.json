@@ -8,7 +8,18 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(grep:*)",
       "Bash(echo ✓ $file:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "WebSearch",
+      "WebFetch(domain:docs.litellm.ai)",
+      "Bash(pip install:*)",
+      "Bash(pip3 install:*)",
+      "WebFetch(domain:developers.openai.com)",
+      "WebFetch(domain:developers.googleblog.com)",
+      "WebFetch(domain:antigravity.google)",
+      "WebFetch(domain:codelabs.developers.google.com)",
+      "Bash(claude plugin:*)",
+      "Bash(head:*)",
+      "Bash(npx get-shit-done-cc@latest:*)"
     ]
   }
 }

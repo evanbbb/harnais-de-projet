@@ -49,6 +49,10 @@ To update the harness in a consuming project, follow `harness-CHECK-4-UPDATES.md
 
 See `harness-LOAD-THIS.md` for full onboarding steps.
 
+## CLI Compatibility
+
+This harness is optimized for Claude Code but works with other AI CLIs. See `00_init/references/cli-compatibility.md` for tool equivalents and per-CLI guides. Agent files contain Claude-specific elements (`model: inherit`, `<commentary>` tags, named tool references) — these are functional in Claude Code and safely ignored by other CLIs.
+
 ## Folder Structure
 
 ```

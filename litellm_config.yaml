@@ -1,0 +1,67 @@
+model_list:
+  # ============================================================
+  # Tier 1 — Flagship: complex reasoning, planning, debugging
+  # ============================================================
+  - model_name: "tier-1-flagship"
+    litellm_params:
+      model: "anthropic/claude-opus-4"
+      api_key: "os.environ/ANTHROPIC_API_KEY"
+
+  - model_name: "tier-1-flagship"
+    litellm_params:
+      model: "openai/gpt-4o"
+      api_key: "os.environ/OPENAI_API_KEY"
+
+  - model_name: "tier-1-flagship"
+    litellm_params:
+      model: "openai/kimi-k2.5"
+      api_base: "https://api.moonshot.cn/v1"
+      api_key: "os.environ/MOONSHOT_API_KEY"
+
+  - model_name: "tier-1-flagship"
+    litellm_params:
+      model: "gemini/gemini-2.5-pro"
+      api_key: "os.environ/GOOGLE_API_KEY"
+
+  # ============================================================
+  # Tier 2 — Balanced: implementation, reviews
+  # ============================================================
+  - model_name: "tier-2-balanced"
+    litellm_params:
+      model: "anthropic/claude-sonnet-4"
+      api_key: "os.environ/ANTHROPIC_API_KEY"
+
+  - model_name: "tier-2-balanced"
+    litellm_params:
+      model: "openai/gpt-4o-mini"
+      api_key: "os.environ/OPENAI_API_KEY"
+
+  - model_name: "tier-2-balanced"
+    litellm_params:
+      model: "gemini/gemini-2.0-pro"
+      api_key: "os.environ/GOOGLE_API_KEY"
+
+  # ============================================================
+  # Tier 3 — Fast: verification, quick checks
+  # ============================================================
+  - model_name: "tier-3-fast"
+    litellm_params:
+      model: "anthropic/claude-haiku-4-5"
+      api_key: "os.environ/ANTHROPIC_API_KEY"
+
+  - model_name: "tier-3-fast"
+    litellm_params:
+      model: "gemini/gemini-2.0-flash"
+      api_key: "os.environ/GOOGLE_API_KEY"
+
+# ============================================================
+# Router settings
+# ============================================================
+router_settings:
+  routing_strategy: "cost-based-routing"
+  num_retries: 2
+  fallbacks:
+    - tier-1-flagship: ["tier-2-balanced"]
+    - tier-2-balanced: ["tier-3-fast"]
+  timeout: 120
+  allowed_fails: 3

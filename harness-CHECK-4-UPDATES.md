@@ -1,204 +1,165 @@
 # Harness Check for Updates
 
-Instructions for updating a consuming project's harness copy when harnais_de_projet has new or changed content.
+The harness is linked via symlink (`docs/harness → harnais_de_projet`), so the consuming project always reads the current harness files directly. There is nothing to copy or diff.
 
-Read this file when the user wants to check for harness updates or when `docs/harness.md` indicates a newer harness version is available. **Every update is optional** — confirm with the user before applying each change.
-
----
-
-## Prerequisites
-
-- The consuming project has already run harness init (`harness-LOAD-THIS.md`) and has `docs/harness/` with a local copy.
-- You have access to the harnais_de_projet source (path on disk, or the repo root).
+If the project has an older harness setup, follow the relevant migration section first:
+- **Copy-based** (`docs/harness/` is a real directory): see "Migrating from a copy-based harness"
+- **Absolute-path reference** (no `docs/harness` at all — `harness.md` points directly to harnais_de_projet by full path): see "Migrating from an absolute-path harness"
 
 ---
 
-## Step 1: Check if updates exist
+## Migrating from a copy-based harness
 
-Compare the **Harness version** at the top of:
-- **Upstream**: `AGENT_SKILL_DIRECTORY.md` in harnais_de_projet
-- **Local**: `docs/harness/AGENT_SKILL_DIRECTORY.md` in the consuming project
+Run this if `docs/harness` is a directory of copied files rather than a symlink. Check:
 
-If the upstream version is newer, or if the user explicitly asked to check for updates, proceed. Otherwise, report: "Harness is up to date (version X)."
+```bash
+ls -la docs/harness
+```
 
----
+If the first column shows `d` (directory) rather than `l` (symlink), follow these steps.
 
-## Step 2: Identify what changed
+**Step 1: Confirm the harnais_de_projet path**
 
-Compare the harness source against `docs/harness/` in the consuming project. Categorize each item as:
+The user must confirm the absolute path to harnais_de_projet on this machine before proceeding.
 
-- **New** — exists in source, not in project
-- **Updated** — exists in both, content differs
-- **Unchanged** — same in both (skip)
+**Step 2: Remove the stale copy**
 
-Present a summary to the user before making any changes.
+```bash
+rm -rf docs/harness
+```
 
----
+Confirm with the user before running this — it deletes the entire copied harness directory.
 
-## Step 3: Update core harness files (each optional)
+**Step 3: Create the symlink**
 
-For each item below, **ask the user** before copying or overwriting. Do not batch multiple items into a single yes/no — confirm each one.
+```bash
+ln -s /path/to/harnais_de_projet docs/harness
+```
 
-### 3a. Orchestrator
+**Step 4: Verify the symlink resolves**
 
-| Source | Destination | Action |
-|--------|-------------|--------|
-| `orchestrator.md` | `docs/harness/orchestrator.md` | Overwrite if updated |
+```bash
+ls docs/harness/orchestrator.md
+```
 
-**Prompt**: "Overwrite `docs/harness/orchestrator.md` with the latest from the harness? (yes / skip)"
+If this fails, the path is wrong — go back to Step 1.
 
----
+**Step 5: Update docs/harness.md**
 
-### 3b. Phase files
+The project's `docs/harness.md` was generated from an older template. It needs two changes:
 
-| Source | Destination | Action |
-|--------|-------------|--------|
-| `01_plan/PLAN_PHASE.md` | `docs/harness/01_plan/PLAN_PHASE.md` | Overwrite if updated |
-| `02_work/WORK_PHASE.md` | `docs/harness/02_work/WORK_PHASE.md` | Overwrite if updated |
-| `03_review/REVIEW_PHASE.md` | `docs/harness/03_review/REVIEW_PHASE.md` | Overwrite if updated |
-| `04_compound/COMPOUND_PHASE.md` | `docs/harness/04_compound/COMPOUND_PHASE.md` | Overwrite if updated |
+1. **Location line** — change:
+   ```
+   Harness location: docs/harness (local copy)
+   ```
+   to:
+   ```
+   Harness location: docs/harness (symlink → harnais_de_projet)
+   ```
 
-**Prompt** (per file or as a group, user's choice): "Update phase file(s) X, Y, Z? (yes / skip / list which ones)"
+2. **Session-start section** — replace the old version-check block (the one with `last_seen_version`) with:
+   ```
+   1. **Check harness symlink**: Verify `docs/harness/orchestrator.md` is accessible. If not, the symlink to harnais_de_projet may be broken — tell the user: "The harness symlink at docs/harness is not resolving. Check that harnais_de_projet is still at the expected path." To update the harness, run `git pull` in harnais_de_projet.
+   ```
+   Remove the `last_seen_version:` line entirely.
 
----
+3. **How to use section** — if the old `harness.md` is missing entries for project lifecycle, session management, or per-agent paths, compare it against `harness-template.md` in harnais_de_projet and add what's missing. Preserve any project-specific content.
 
-### 3c. Agents (new and updated)
-
-For each agent in harnais_de_projet:
-
-- **00_init/agents/** — `project-questioner.md`, `codebase-mapper.md`
-- **01_plan/agents/** — `best-practices-researcher.md`, `framework-docs-researcher.md`, `plan-checker.md`, `repo-research-analyst.md`, `research-synthesizer.md`, `spec-flow-analyzer.md`
-- **02_work/agents/** — `debugger.md`, `implementation-executor.md`, `test-writer.md`
-- **03_review/agents/** — `bug-reproduction-validator.md`, `code-simplicity-reviewer.md`, `pattern-recognition-specialist.md`, `performance-oracle.md`, `verification-agent.md`
-
-**If new** (exists in source, missing in project):
-- **Prompt**: "Copy new agent `[name].md` to `docs/harness/[phase]/agents/[name].md`? (yes / skip)"
-
-**If updated** (exists in both, content differs):
-- **Prompt**: "Overwrite `docs/harness/[phase]/agents/[name].md` with the latest? (yes / skip)"
-
-Confirm each agent separately unless the user says "update all agents."
+After these changes the migration is complete. The project now reads directly from harnais_de_projet on every session.
 
 ---
 
-### 3d. Skills (new and updated)
+## Migrating from an absolute-path harness
 
-Skills include their folder: `SKILL.md` plus any `assets/`, `references/`, or other subdirectories. Copy or overwrite the **entire skill folder**.
+Run this if `docs/harness` does not exist and `docs/harness.md` references harnais_de_projet by its full absolute path (e.g. `Harness location: /Users/you/code/harnais_de_projet`). Check:
 
-**00_init/skills/** — `project-setup/`
-**01_plan/skills/** — `brainstorming/`
-**04_compound/skills/** — `compound-docs/`, `document-review/`, `milestone-retrospective/`
+```bash
+ls -la docs/harness 2>/dev/null || echo "no docs/harness"
+```
 
-**If new** (skill folder exists in source, missing in project):
-- **Prompt**: "Copy new skill `[skill-name]/` (entire folder) to `docs/harness/[phase]/skills/[skill-name]/`? (yes / skip)"
+If this prints "no docs/harness", follow these steps.
 
-**If updated** (skill folder exists in both, any file differs):
-- **Prompt**: "Overwrite skill `[skill-name]/` with the latest? This replaces the whole folder including assets and references. (yes / skip)"
+**Step 1: Confirm the harnais_de_projet path**
 
-Confirm each skill separately unless the user says "update all skills."
+Read `docs/harness.md` — the absolute path is in the `Harness location:` line. Confirm with the user that it is still correct.
 
----
+**Step 2: Create the symlink**
 
-### 3e. Agent/skill catalog
+No removal needed — `docs/harness` doesn't exist yet.
 
-| Source | Destination | Action |
-|--------|-------------|--------|
-| `AGENT_SKILL_DIRECTORY.md` | `docs/harness/AGENT_SKILL_DIRECTORY.md` | Overwrite if updated |
+```bash
+ln -s /path/to/harnais_de_projet docs/harness
+```
 
-**Prompt**: "Overwrite `docs/harness/AGENT_SKILL_DIRECTORY.md` with the latest catalog? (yes / skip)"
+**Step 3: Verify the symlink resolves**
 
----
+```bash
+ls docs/harness/orchestrator.md
+```
 
-### 3f. Design rules
+If this fails, the path is wrong — go back to Step 1.
 
-| Source | Destination | Action |
-|--------|-------------|--------|
-| `design-rules.md` | `docs/design-rules.md` | Overwrite or merge |
+**Step 4: Update docs/harness.md**
 
-**Important**: The project may have customized `docs/design-rules.md`. Options:
+1. **Location line** — change the absolute path line to:
+   ```
+   Harness location: docs/harness (symlink → harnais_de_projet)
+   ```
 
-1. **Overwrite** — Replace with harness design rules (loses project customizations).
-2. **Merge** — Show a diff; user or agent manually merges new harness rules into the project file.
-3. **Skip** — Keep the project's current design rules.
+2. **How to use section** — replace all absolute paths with `docs/harness/`-relative paths. Compare against `harness-template.md` in harnais_de_projet and bring the section up to date (the old version likely has placeholder paths like `{phase}/PHASE.md` rather than the real filenames).
 
-**Prompt**: "The harness has updated `design-rules.md`. Your project has `docs/design-rules.md`. Options: (1) Overwrite with harness version, (2) I'll show a diff for manual merge, (3) Skip. Which?"
+3. **Session-start section** — replace the old version-check block (the one with `last_seen_version`) with:
+   ```
+   1. **Check harness symlink**: Verify `docs/harness/orchestrator.md` is accessible. If not, the symlink to harnais_de_projet may be broken — tell the user: "The harness symlink at docs/harness is not resolving. Check that harnais_de_projet is still at the expected path." To update the harness, run `git pull` in harnais_de_projet.
+   ```
+   Remove the `last_seen_version:` line entirely.
 
----
-
-### 3g. Harness config (docs/harness.md)
-
-| Source | Destination | Action |
-|--------|-------------|--------|
-| `harness-template.md` | `docs/harness.md` | Update version only, or full replace |
-
-The project's `docs/harness.md` may have customizations (e.g. project-specific notes). Recommend:
-
-- **Minimal update**: Only update `last_seen_version` in `docs/harness.md` to match the new harness version. Preserves all other content.
-- **Full replace**: Overwrite `docs/harness.md` with the latest `harness-template.md`. Use only if the project has not customized it.
-
-**Prompt**: "Update `docs/harness.md`: (1) Just update `last_seen_version` to [X], (2) Full replace with latest template, (3) Skip. Which?"
+After these changes the migration is complete.
 
 ---
 
-### 3h. Project orchestrator and session management
+## To update the harness
 
-If the consuming project uses project lifecycle management:
+Pull the latest changes in harnais_de_projet:
 
-| Source | Destination | Action |
-|--------|-------------|--------|
-| `project-orchestrator.md` | `docs/harness/project-orchestrator.md` | Overwrite if updated |
-| `00_init/` | `docs/harness/00_init/` | Copy/overwrite entire folder |
-| `05_session/` | `docs/harness/05_session/` | Copy/overwrite entire folder |
+```bash
+cd /path/to/harnais_de_projet && git pull
+```
 
-**Prompt**: "Update project lifecycle files (project-orchestrator, 00_init, 05_session)? (yes / skip)"
+That's it. All projects with the symlink immediately see the updated files.
 
 ---
 
-### 3i. References (new and updated)
+## If docs/harness.md needs refreshing
 
-Reference files in `*/references/` directories. These are standalone docs that agents and skills point to.
+`docs/harness.md` lives in the consuming project and is not part of the symlink. It is generated once from `harness-template.md` and may drift if the template changes significantly.
 
-- **00_init/references/** — `questioning-methodology.md`, `model-profiles.md`
-- **01_plan/references/** — `plan-format.md`, `plan-checker-dimensions.md`
-- **02_work/references/** — `deviation-rules.md`, `summary-format.md`, `git-conventions.md`
-- **03_review/references/** — `verification-levels.md`, `stub-indicators.md`
-- **04_compound/references/** — `retrospective-format.md`
-- **05_session/references/** — `continue-here-format.md`
+To refresh it:
 
-**Prompt**: "Update reference files? (yes / skip / list which ones)"
+1. Read `harness-template.md` from harnais_de_projet
+2. Compare it to `docs/harness.md` in the consuming project
+3. Apply any structural changes (new sections, updated instructions) — preserve project-specific customizations
 
----
-
-## Step 4: Post-update
-
-After applying the user's chosen updates:
-
-1. If `AGENT_SKILL_DIRECTORY.md` was updated, ensure `last_seen_version` in `docs/harness.md` matches the new Harness version (so the session-start check stops flagging it).
-2. Report what was updated and what was skipped.
+This is only needed when the template itself has meaningful structural changes, not for routine harness updates.
 
 ---
 
-## Step 5: Adopt Project Lifecycle (optional)
+## If the symlink is broken
 
-Only applicable when `00_init/` was newly copied during this update (i.e., the project is upgrading from a version that didn't include lifecycle management).
+If `docs/harness/orchestrator.md` is not accessible, the symlink may be pointing to a path that no longer exists (e.g., harnais_de_projet was moved).
 
-**Prompt**: "The new harness version includes project lifecycle management. Would you like to set it up for this project? This creates `.planning/` with project definition, requirements, and roadmap. (yes / skip)"
+Fix it:
 
-- **If yes**: "Run `docs/harness/00_init/INIT_PHASE.md` to set up the project lifecycle."
-- **If skip**: "You can set it up later by reading `docs/harness/00_init/INIT_PHASE.md`."
+```bash
+# Remove the broken symlink
+rm docs/harness
 
----
+# Re-create with the correct path
+ln -s /new/path/to/harnais_de_projet docs/harness
+```
 
-## Summary
+Verify:
 
-| Category | Source(s) | Confirm before each |
-|----------|-----------|---------------------|
-| Orchestrator | `orchestrator.md` | yes |
-| Project orchestrator | `project-orchestrator.md` | yes |
-| Phase files | `*_PHASE.md` per phase (00-05) | yes |
-| Agents | `*/agents/*.md` | yes, per agent |
-| Skills | `*/skills/*/` (whole folders) | yes, per skill |
-| References | `*/references/*.md` | yes (per file or group) |
-| Catalog | `AGENT_SKILL_DIRECTORY.md` | yes |
-| Design rules | `design-rules.md` | yes (overwrite / merge / skip) |
-| Harness config | `harness-template.md` → `docs/harness.md` | yes (version only / full / skip) |
+```bash
+ls docs/harness/orchestrator.md
+```

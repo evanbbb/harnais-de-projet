@@ -1,7 +1,7 @@
 ## Harness
 
 This project uses harnais_de_projet for its agent workflow.
-Harness location: docs/harness (local copy)
+Harness location: docs/harness (symlink → harnais_de_projet)
 
 ### How to use
 - Full task workflow: Read docs/harness/orchestrator.md
@@ -25,11 +25,9 @@ Harness location: docs/harness (local copy)
 
 ### On session start
 
-1. **Check for harness updates**: If docs/harness/AGENT_SKILL_DIRECTORY.md exists, read it and compare the `Harness version` at the top against the `last_seen_version` below. If the harness version is newer, tell the user: "Harness updated to version [X]. Read AGENT_SKILL_DIRECTORY.md for what's available. For update instructions, read harness-CHECK-4-UPDATES.md in the harness repo." Then update `last_seen_version` here to match.
+1. **Check harness symlink**: Verify `docs/harness/orchestrator.md` is accessible. If not, the symlink to harnais_de_projet may be broken — tell the user: "The harness symlink at docs/harness is not resolving. Check that harnais_de_projet is still at the expected path." To update the harness, run `git pull` in harnais_de_projet.
 
 2. If the user hasn't given a specific task, read `docs/to-do.md` and suggest the highest-priority item that isn't already in progress. Present it as a suggestion, not an action — wait for the user to confirm before starting work.
-
-last_seen_version: 1.5
 
 ### Project docs (canonical structure)
 - docs/design-rules.md — visual/design rules for this project

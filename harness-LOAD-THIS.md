@@ -25,6 +25,21 @@ If **yes**: After completing all steps below, also copy `00_init/`, `05_session/
 
 If **no**: Proceed with the standard setup below. The project lifecycle can be added later.
 
+**CLI question**: Which AI coding CLI are you using?
+
+```
+1. Claude Code (recommended — full feature support)
+2. Antigravity (Google — agent-first IDE, closest structural fit to harness)
+3. Codex (OpenAI — native multi-agent support)
+4. Gemini CLI (Google — native MCP, 1M context)
+5. Cursor
+6. Aider
+7. Cline
+8. Other
+```
+
+If not Claude Code: See `00_init/references/cli-compatibility.md` after completing setup for tool equivalents, agent dispatch guidance, and MCP fallbacks. Codex users should also set up `.codex/config.toml` with harness agent roles — see the Codex section in that doc.
+
 - Check for existing `docs/` directory
 - Identify which root-level project entry point exists (any one of `CLAUDE.md`, `PROJECT.md`, `README.md`, `.cursorrules`, or similar). Only one is needed — do not flag missing alternatives as issues.
 - Note any existing documentation files (ARCHITECTURE.md, CONTRIBUTING.md, etc.)
@@ -71,30 +86,25 @@ Ask the user to choose:
 
 ---
 
-## Step 2b: Copy harness assets
+## Step 2b: Link harness
 
-Copy the orchestrator and phase folders from harnais_de_projet into the project so the harness runs from a local copy.
+Create a symlink from `docs/harness` to the harnais_de_projet directory. This makes all harness content immediately available and always current — no copying or manual updates needed.
 
-**Source**: The path to harnais_de_projet on this machine (the user must provide this, or it may be known from context).
+**Source**: The absolute path to harnais_de_projet on this machine (the user must provide this, or it may be known from context).
 
-**Destination**: `docs/harness/` in the consuming project. Create this directory if it does not exist.
+```bash
+ln -s /path/to/harnais_de_projet docs/harness
+```
 
-**What to copy** (entire trees; preserve subdirectories and filenames):
+Confirm the path with the user before running. After creating the symlink, verify it resolves correctly:
 
-- `orchestrator.md` → `docs/harness/orchestrator.md`
-- `01_plan/` → `docs/harness/01_plan/` (entire folder: phase file, agents/, skills/, references/)
-- `02_work/` → `docs/harness/02_work/` (phase file, agents/, references/)
-- `03_review/` → `docs/harness/03_review/` (phase file, agents/, references/)
-- `04_compound/` → `docs/harness/04_compound/` (phase file, skills/, references/)
-- `AGENT_SKILL_DIRECTORY.md` → `docs/harness/AGENT_SKILL_DIRECTORY.md` (optional; recommended so the project has a local harness version and catalog)
+```bash
+ls docs/harness/orchestrator.md
+```
 
-**If project lifecycle was selected in Step 1** (also copy):
+**Note**: This symlink is machine-local. It works perfectly for a single developer on one machine. If the project ever needs to run on another machine or in CI, the symlink will be broken there — use a copy or git submodule instead for those scenarios.
 
-- `project-orchestrator.md` → `docs/harness/project-orchestrator.md`
-- `00_init/` → `docs/harness/00_init/` (entire folder: phase file, agents/, skills/, references/)
-- `05_session/` → `docs/harness/05_session/` (session management, references/)
-
-Confirm with the user before performing the copy. If any destination path already exists (e.g. a previous copy), ask per file or per folder: **overwrite** or **skip**. Do not delete or replace without explicit user confirmation.
+**If project lifecycle was selected in Step 1**: No additional steps — all files (including `project-orchestrator.md`, `00_init/`, and `05_session/`) are available through the symlink automatically.
 
 ---
 
@@ -170,13 +180,13 @@ The harness does not dictate which file this goes in — that depends on the use
 After completing all steps, confirm:
 - [ ] `docs/` directory exists with all subdirectories
 - [ ] `docs/design-rules.md` exists (harness design rules, blank template, or already present)
-- [ ] `docs/harness/` exists and contains `orchestrator.md`, `01_plan/`, `02_work/`, `03_review/`, `04_compound/` (and optionally `AGENT_SKILL_DIRECTORY.md`)
-- [ ] `docs/harness.md` exists and points to the local harness at `docs/harness`
+- [ ] `docs/harness` is a symlink pointing to harnais_de_projet, and `docs/harness/orchestrator.md` resolves correctly
+- [ ] `docs/harness.md` exists and points to the harness at `docs/harness`
 - [ ] No files were moved without user confirmation
 - [ ] Existing documentation was preserved (moved, not deleted)
 
 **If project lifecycle was selected:**
-- [ ] `docs/harness/` also contains `project-orchestrator.md`, `00_init/`, `05_session/`
+- [ ] `docs/harness/project-orchestrator.md`, `docs/harness/00_init/`, `docs/harness/05_session/` are accessible via the symlink
 - [ ] `.planning/` exists with PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md, config.json (created by running 00_init)
 
 Report the final state to the user.

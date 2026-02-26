@@ -17,6 +17,31 @@ If `.planning/` exists in the project root, this task loop is running within the
 
 If `.planning/` does not exist, this orchestrator runs standalone as a task-level loop. No project artifacts are required.
 
+## Model Routing
+
+If `.planning/config.json` exists, read `model_profile` and `model_routing.provider` to resolve which model each agent role uses.
+
+**Role → model** (based on profile):
+
+| Role | quality | balanced | budget |
+|------|---------|----------|--------|
+| planning | opus | opus | sonnet |
+| execution | opus | sonnet | sonnet |
+| verification | sonnet | sonnet | haiku |
+| debugging | opus | sonnet | sonnet |
+
+**Agent roles:**
+- planning: repo-research-analyst, best-practices-researcher, framework-docs-researcher, spec-flow-analyzer, research-synthesizer
+- execution: implementation-executor, test-writer
+- verification: plan-checker, verification-agent, code-simplicity-reviewer, pattern-recognition-specialist, performance-oracle, bug-reproduction-validator
+- debugging: debugger
+
+When invoking any agent via the Task tool, include the resolved `model:` parameter.
+
+If `model_routing.provider = "litellm"`, models are routed through the LiteLLM proxy. The Task tool still receives `opus`/`sonnet`/`haiku` as values — the proxy maps them to configured providers. Ensure `ANTHROPIC_BASE_URL=http://localhost:4000` is set before agent invocations — warn the user if it is not.
+
+If no `.planning/config.json` exists (standalone mode), omit `model:` from Task tool invocations — all agents inherit the parent session model.
+
 ## Confirmation Gate
 
 Every agent invocation follows this pattern:
@@ -57,14 +82,14 @@ Only after the user has implemented (or explicitly skipped) may you present the 
 
 **Agents to consider** (present each one that's relevant to the task):
 
-| Agent | When to use | Path |
-|-------|------------|------|
-| `repo-research-analyst` | Starting work on an unfamiliar codebase or area | `01_plan/agents/repo-research-analyst.md` |
-| `best-practices-researcher` | Need external patterns or examples for the approach | `01_plan/agents/best-practices-researcher.md` |
-| `framework-docs-researcher` | Working with a framework/library and need docs | `01_plan/agents/framework-docs-researcher.md` |
-| `spec-flow-analyzer` | Need to map user flows or find spec gaps | `01_plan/agents/spec-flow-analyzer.md` |
-| `plan-checker` | A plan has been drafted and needs validation before execution | `01_plan/agents/plan-checker.md` |
-| `research-synthesizer` | Multiple research agents ran — combine their outputs | `01_plan/agents/research-synthesizer.md` |
+| Agent | Role | When to use | Path |
+|-------|------|------------|------|
+| `repo-research-analyst` | planning | Starting work on an unfamiliar codebase or area | `01_plan/agents/repo-research-analyst.md` |
+| `best-practices-researcher` | planning | Need external patterns or examples for the approach | `01_plan/agents/best-practices-researcher.md` |
+| `framework-docs-researcher` | planning | Working with a framework/library and need docs | `01_plan/agents/framework-docs-researcher.md` |
+| `spec-flow-analyzer` | planning | Need to map user flows or find spec gaps | `01_plan/agents/spec-flow-analyzer.md` |
+| `plan-checker` | verification | A plan has been drafted and needs validation before execution | `01_plan/agents/plan-checker.md` |
+| `research-synthesizer` | planning | Multiple research agents ran — combine their outputs | `01_plan/agents/research-synthesizer.md` |
 
 **Skills to consider**:
 
@@ -91,11 +116,11 @@ Proceed to Work phase? (yes / stop)
 
 **Agents to consider**:
 
-| Agent | When to use | Path |
-|-------|------------|------|
-| `implementation-executor` | A plan exists and needs to be implemented | `02_work/agents/implementation-executor.md` |
-| `test-writer` | Implementation is done and needs test coverage | `02_work/agents/test-writer.md` |
-| `debugger` | Implementation hits unexpected failures that aren't obvious from the error | `02_work/agents/debugger.md` |
+| Agent | Role | When to use | Path |
+|-------|------|------------|------|
+| `implementation-executor` | execution | A plan exists and needs to be implemented | `02_work/agents/implementation-executor.md` |
+| `test-writer` | execution | Implementation is done and needs test coverage | `02_work/agents/test-writer.md` |
+| `debugger` | debugging | Implementation hits unexpected failures that aren't obvious from the error | `02_work/agents/debugger.md` |
 
 **Phase output**: Implemented code with tests.
 
@@ -116,13 +141,13 @@ Proceed to Review phase? (yes / stop)
 
 **Agents to consider** (not all run every time — select based on the work done):
 
-| Agent | When to use | Path |
-|-------|------------|------|
-| `verification-agent` | After any implementation — first reviewer, checks existence, stubs, wiring, functionality | `03_review/agents/verification-agent.md` |
-| `code-simplicity-reviewer` | After any implementation — check for over-engineering | `03_review/agents/code-simplicity-reviewer.md` |
-| `pattern-recognition-specialist` | Check that code follows project patterns | `03_review/agents/pattern-recognition-specialist.md` |
-| `performance-oracle` | Implementation touches data processing, queries, or scale-sensitive code | `03_review/agents/performance-oracle.md` |
-| `bug-reproduction-validator` | A bug was reported and fixed — verify the fix | `03_review/agents/bug-reproduction-validator.md` |
+| Agent | Role | When to use | Path |
+|-------|------|------------|------|
+| `verification-agent` | verification | After any implementation — first reviewer, checks existence, stubs, wiring, functionality | `03_review/agents/verification-agent.md` |
+| `code-simplicity-reviewer` | verification | After any implementation — check for over-engineering | `03_review/agents/code-simplicity-reviewer.md` |
+| `pattern-recognition-specialist` | verification | Check that code follows project patterns | `03_review/agents/pattern-recognition-specialist.md` |
+| `performance-oracle` | verification | Implementation touches data processing, queries, or scale-sensitive code | `03_review/agents/performance-oracle.md` |
+| `bug-reproduction-validator` | verification | A bug was reported and fixed — verify the fix | `03_review/agents/bug-reproduction-validator.md` |
 
 **After each review agent** (before moving to the next): If the agent produced issues or suggestions, present them and pause:
 ```
