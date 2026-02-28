@@ -51,7 +51,7 @@ See `harness-LOAD-THIS.md` for full onboarding steps.
 
 ## CLI Compatibility
 
-This harness is optimized for Claude Code but works with other AI CLIs. See `00_init/references/cli-compatibility.md` for tool equivalents and per-CLI guides. Agent files contain Claude-specific elements (`model: inherit`, `<commentary>` tags, named tool references) — these are functional in Claude Code and safely ignored by other CLIs.
+This harness is optimized for Claude Code but works with other AI CLIs. See `00_init/references/cli-compatibility.md` for tool equivalents and per-CLI guides. Agent files contain Claude-specific elements (`<commentary>` tags, named tool references) that are safely ignored by other CLIs.
 
 ## Folder Structure
 
@@ -65,7 +65,7 @@ harnais_de_projet/
 │   ├── INIT_PHASE.md
 │   ├── agents/                  # project-questioner, codebase-mapper
 │   ├── skills/                  # project-setup (creates .planning/)
-│   └── references/              # questioning-methodology, model-profiles
+│   └── references/              # questioning-methodology
 ├── 01_plan/                     # Planning phase — research, brainstorm, spec out work
 │   ├── PLAN_PHASE.md
 │   ├── agents/                  # Research agents + plan-checker, research-synthesizer

@@ -1,7 +1,6 @@
 ---
 name: verification-agent
 description: "4-level verification of implementation completeness: exists, substantive, wired, functional. Use as the first reviewer after implementation to catch stubs, orphan code, and broken integrations."
-model: inherit
 ---
 
 <examples>

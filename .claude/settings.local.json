@@ -10,7 +10,6 @@
       "Bash(echo ✓ $file:*)",
       "Bash(echo:*)",
       "WebSearch",
-      "WebFetch(domain:docs.litellm.ai)",
       "Bash(pip install:*)",
       "Bash(pip3 install:*)",
       "WebFetch(domain:developers.openai.com)",

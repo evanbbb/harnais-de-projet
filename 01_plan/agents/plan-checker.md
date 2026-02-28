@@ -1,7 +1,6 @@
 ---
 name: plan-checker
 description: "Validates plans across 8 quality dimensions before execution. Use after a plan is drafted to catch gaps, missing verifications, and scope issues."
-model: inherit
 ---
 
 <examples>

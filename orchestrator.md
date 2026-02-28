@@ -17,30 +17,16 @@ If `.planning/` exists in the project root, this task loop is running within the
 
 If `.planning/` does not exist, this orchestrator runs standalone as a task-level loop. No project artifacts are required.
 
-## Model Routing
+## Agent Roles
 
-If `.planning/config.json` exists, read `model_profile` and `model_routing.provider` to resolve which model each agent role uses.
+Use these roles to decide which agent to run:
 
-**Role → model** (based on profile):
-
-| Role | quality | balanced | budget |
-|------|---------|----------|--------|
-| planning | opus | opus | sonnet |
-| execution | opus | sonnet | sonnet |
-| verification | sonnet | sonnet | haiku |
-| debugging | opus | sonnet | sonnet |
-
-**Agent roles:**
 - planning: repo-research-analyst, best-practices-researcher, framework-docs-researcher, spec-flow-analyzer, research-synthesizer
 - execution: implementation-executor, test-writer
 - verification: plan-checker, verification-agent, code-simplicity-reviewer, pattern-recognition-specialist, performance-oracle, bug-reproduction-validator
 - debugging: debugger
 
-When invoking any agent via the Task tool, include the resolved `model:` parameter.
-
-If `model_routing.provider = "litellm"`, models are routed through the LiteLLM proxy. The Task tool still receives `opus`/`sonnet`/`haiku` as values — the proxy maps them to configured providers. Ensure `ANTHROPIC_BASE_URL=http://localhost:4000` is set before agent invocations — warn the user if it is not.
-
-If no `.planning/config.json` exists (standalone mode), omit `model:` from Task tool invocations — all agents inherit the parent session model.
+When invoking agents via the Task tool, focus on role fit and workflow stage.
 
 ## Confirmation Gate
 

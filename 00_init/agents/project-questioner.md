@@ -1,7 +1,6 @@
 ---
 name: project-questioner
 description: "Extracts project vision, requirements, and success criteria through conversational questioning. Use when starting a new project or adopting an existing codebase into the project lifecycle."
-model: inherit
 ---
 
 <examples>

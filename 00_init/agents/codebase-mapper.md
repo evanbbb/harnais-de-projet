@@ -1,7 +1,6 @@
 ---
 name: codebase-mapper
 description: "Analyzes a codebase through 4 lenses (technology, architecture, quality, concerns) for project-level planning. Use when adopting an existing codebase into the project lifecycle or starting a new phase of work."
-model: inherit
 ---
 
 <examples>

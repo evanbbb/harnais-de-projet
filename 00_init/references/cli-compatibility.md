@@ -13,7 +13,6 @@ This harness is optimized for Claude Code but works with other AI coding CLIs. T
 | **File read** | Read tool | Built-in file read | Built-in file read | Built-in file read | Built-in file read | Built-in file read | Built-in file read |
 | **Content search** | Grep tool | Built-in code search | Built-in code search | Built-in code search | Built-in code search | Built-in code search + Google Search grounding | Built-in code search + browser subagent |
 | **MCP (Context7)** | Native MCP support | Use web search or direct docs URLs | Use web search or direct docs URLs | MCP support (varies by version) | Use web search or direct docs URLs | Native MCP support via `settings.json` | Use web search or direct docs URLs |
-| **`model: inherit`** | Orchestrator controls model | Ignored (uses configured model) | Ignored (uses configured model) | Ignored (uses configured model) | Override via `model` in role `.toml` | Ignored (uses `-m` flag model) | Per-conversation model dropdown |
 | **`<commentary>` tags** | Rendered as agent thinking | Ignored (harmless) | Ignored (harmless) | Ignored (harmless) | Ignored (harmless) | Ignored (harmless) | Ignored (harmless) |
 | **Named tool refs** | Exact tool names (Edit, Write, etc.) | CLI uses its own tool names | CLI uses its own tool names | CLI uses its own tool names | CLI uses its own tool names | CLI uses its own tool names | CLI uses its own tool names |
 
@@ -27,7 +26,7 @@ In Claude Code, the orchestrator uses the Task tool to launch agents as independ
 
 1. Load the agent file into your context (method varies by CLI — see below)
 2. Provide the agent with its required inputs (described in the agent file's header)
-3. The agent's instructions guide the model through the task
+3. The agent's instructions guide the task
 
 The main difference: in Claude Code, agents run in isolated context windows. In other CLIs, agents share your main context, which means you may hit context limits sooner on complex multi-agent workflows.
 
@@ -51,13 +50,13 @@ Context7 references in agent files are non-blocking — agents will work without
 
 Cursor works well with the harness since it can inject files directly into context using `@file` references.
 
-To use an agent: type `@docs/harness/01_plan/agents/repo-research-analyst.md` in the chat to load the agent prompt, then describe your task. For the orchestrator workflow, load `@docs/harness/orchestrator.md` and follow its instructions manually — Cursor will handle the file operations using its built-in tools. Set your preferred model in Cursor's settings; `model: inherit` lines in agent frontmatter are ignored.
+To use an agent: type `@docs/harness/01_plan/agents/repo-research-analyst.md` in the chat to load the agent prompt, then describe your task. For the orchestrator workflow, load `@docs/harness/orchestrator.md` and follow its instructions manually — Cursor will handle the file operations using its built-in tools.
 
 ### Aider
 
 Aider can load harness files using the `/read` command, which adds files to the chat context without marking them for editing.
 
-To use an agent: run `/read docs/harness/01_plan/agents/repo-research-analyst.md` to load the agent, then describe your task. For multi-agent workflows, load the orchestrator with `/read docs/harness/orchestrator.md` and step through phases manually. Aider's `--model` flag controls which model runs; agent frontmatter model hints are ignored. Use `--openai-api-base` to point at a LiteLLM proxy for multi-provider routing (see `litellm-config.md`).
+To use an agent: run `/read docs/harness/01_plan/agents/repo-research-analyst.md` to load the agent, then describe your task. For multi-agent workflows, load the orchestrator with `/read docs/harness/orchestrator.md` and step through phases manually.
 
 ### Cline
 
@@ -75,17 +74,9 @@ Gemini CLI is Google's open-source AI agent for the terminal. It has native MCP 
 Read docs/harness.md for agent workflow instructions.
 ```
 
-To use an agent: ask Gemini to read the agent `.md` file (e.g., "Read `docs/harness/01_plan/agents/repo-research-analyst.md` and follow its instructions for this task"). For loading the full harness context, use `--include-directories docs/harness` when launching. Model selection is via the `-m` flag (e.g., `gemini -m gemini-2.5-pro`); `model: inherit` in agent frontmatter is ignored.
+To use an agent: ask Gemini to read the agent `.md` file (e.g., "Read `docs/harness/01_plan/agents/repo-research-analyst.md` and follow its instructions for this task"). For loading the full harness context, use `--include-directories docs/harness` when launching.
 
 **MCP**: Gemini CLI supports MCP natively. Configure Context7 in `~/.gemini/settings.json` the same way you would any MCP server — no fallback to web search needed.
-
-**Model profile mapping for Gemini CLI**:
-
-| Harness Tier | Gemini Model |
-|-------------|-------------|
-| Tier 1 (flagship) | `gemini-2.5-pro` |
-| Tier 2 (balanced) | `gemini-2.0-pro` |
-| Tier 3 (fast) | `gemini-2.0-flash` |
 
 **Orchestrator compatibility**: The `project-orchestrator.md` can be used manually — load it into context and step through phases. Gemini CLI does not yet have multi-agent dispatch (sub-agent support is in development), so agents share the main context window. The 1M token context helps offset this limitation.
 
@@ -97,12 +88,10 @@ To use an agent: ask Gemini to read the agent `.md` file (e.g., "Read `docs/harn
 
 **Limitations**:
 - No multi-agent dispatch yet — agents run in the main context, not isolated subprocesses
-- No per-agent model selection within a session
-- Gemini models only (no LiteLLM routing unless using Gemini CLI with a proxy)
 
 ### Codex
 
-Codex (OpenAI's CLI agent) has native multi-agent support that maps well to the harness. Unlike other non-Claude CLIs, Codex can dispatch sub-agents with per-role model selection and isolated execution — the closest equivalent to Claude Code's Task tool.
+Codex (OpenAI's CLI agent) has native multi-agent support that maps well to the harness. Unlike other non-Claude CLIs, Codex can dispatch sub-agents with isolated execution — the closest equivalent to Claude Code's Task tool.
 
 **Setup**: Define harness agent roles in `.codex/config.toml` (or `~/.codex/config.toml` for global config). Each role points to a `.toml` config file with `developer_instructions` derived from the agent `.md` content.
 
@@ -137,8 +126,6 @@ config_file = "agents/debugger.toml"
 Example `.codex/agents/researcher.toml`:
 
 ```toml
-model = "o3"
-model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 developer_instructions = """
 You are a research agent. Read docs/harness/01_plan/agents/repo-research-analyst.md
@@ -150,8 +137,6 @@ structured research findings.
 Example `.codex/agents/explorer.toml`:
 
 ```toml
-model = "codex-mini"
-model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 developer_instructions = """
 You are a fast codebase explorer. Read docs/harness/01_plan/agents/spec-flow-analyzer.md
@@ -159,19 +144,10 @@ and follow its instructions. Optimized for quick file search and code reading.
 """
 ```
 
-**Model profile mapping for Codex**:
-
-| Harness Tier | Codex Model | Reasoning Effort |
-|-------------|-------------|-----------------|
-| Tier 1 (flagship) | `o3` | `high` |
-| Tier 2 (balanced) | `o3` | `medium` |
-| Tier 3 (fast) | `codex-mini` | `medium` |
-
 **Orchestrator compatibility**: The `project-orchestrator.md` workflow can run in Codex with one adjustment — set `auto_advance: true` in `config.json` to skip interactive confirmation gates, since Codex sub-agents are non-interactive. The parent Codex session remains interactive for top-level confirmations.
 
 **What works well**:
 - Parallel agent dispatch (Codex spawns multiple sub-agents concurrently)
-- Per-agent model selection via role `.toml` files
 - Isolated execution (sub-agents inherit sandbox policy)
 - The orchestrator can spawn researcher, implementer, and reviewer agents
 
@@ -245,7 +221,6 @@ for this task. Use the researcher skill for codebase analysis if needed.
 **Limitations**:
 - Public preview as of early 2026 — quota limits and occasional instability
 - No MCP support yet — use browser subagent for documentation lookups
-- Model selection (Gemini 3 Pro) available per conversation, not per agent
 - `agents.max_depth` equivalent not documented — agent nesting depth unclear
 
 ---
@@ -254,7 +229,6 @@ for this task. Use the researcher skill for codebase analysis if needed.
 
 The following Claude Code-specific elements appear in agent files and are **safely ignored** by other CLIs:
 
-- **`model: inherit`** in frontmatter — tells Claude Code's Task tool to use the parent model
 - **`<commentary>` tags** — structured thinking output; treated as regular text by other CLIs
 - **Task tool references** — instructions like "launch via Task tool" just mean "run this agent"
 - **`.claude/` path references** — Claude Code's settings directory; Glob/Read calls to these paths return nothing on other CLIs (harmless)

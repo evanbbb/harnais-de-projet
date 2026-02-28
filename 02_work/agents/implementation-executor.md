@@ -1,7 +1,6 @@
 ---
 name: implementation-executor
 description: "Executes a plan step by step, checking off items as completed. Use when a plan exists in docs/plans/ and needs to be implemented methodically."
-model: inherit
 ---
 
 <examples>

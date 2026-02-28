@@ -1,7 +1,6 @@
 ---
 name: research-synthesizer
 description: "Combines outputs from multiple research agents into a prioritized synthesis. Use after running 2+ research agents to consolidate findings before planning."
-model: inherit
 ---
 
 <examples>

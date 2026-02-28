@@ -43,4 +43,4 @@ Harness location: docs/harness (symlink → harnais_de_projet)
 - .planning/REQUIREMENTS.md — categorized requirements with REQ-IDs
 - .planning/ROADMAP.md — phased execution plan with success criteria
 - .planning/STATE.md — current project position and metrics
-- .planning/config.json — workflow configuration (gates, parallelization, model profile)
+- .planning/config.json — workflow configuration (gates, parallelization)

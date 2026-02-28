@@ -17,11 +17,6 @@
     "branching_strategy": "none"
   },
   "cli": "claude-code",
-  "model_routing": {
-    "provider": "anthropic",
-    "litellm_proxy": null
-  },
-  "model_profile": "balanced",
   "confirmation_gates": {
     "project_confirmation": true,
     "phase_verification": true,

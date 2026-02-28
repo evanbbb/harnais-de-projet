@@ -1,7 +1,6 @@
 ---
 name: debugger
 description: "Scientific debugging using observe-hypothesize-experiment-conclude methodology. Use when implementation hits unexpected failures that aren't obvious from the error message."
-model: inherit
 ---
 
 <examples>

@@ -1,7 +1,6 @@
 ---
 name: test-writer
 description: "Writes tests that match the project's existing test patterns and conventions. Use after implementing a feature to ensure test coverage."
-model: inherit
 ---
 
 <examples>

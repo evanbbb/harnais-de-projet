@@ -30,29 +30,6 @@ Read:
 - `.planning/ROADMAP.md` — phase structure, success criteria, progress
 - `.planning/config.json` — workflow toggles, parallelization, confirmation gates
 
-Extract model routing from `config.json`:
-- `model_profile` (default: `"balanced"` if absent)
-- `model_routing.provider` (default: `"anthropic"` if absent)
-
-Resolve model names for this session using the profile:
-
-| Role | quality | balanced | budget |
-|------|---------|----------|--------|
-| planning | opus | opus | sonnet |
-| execution | opus | sonnet | sonnet |
-| verification | sonnet | sonnet | haiku |
-| debugging | opus | sonnet | sonnet |
-
-Store as named references used throughout this session:
-- **M_PLAN** = resolved model for planning role
-- **M_EXEC** = resolved model for execution role
-- **M_VERIFY** = resolved model for verification role
-- **M_DEBUG** = resolved model for debugging role
-
-If `model_routing.provider = "litellm"`:
-- The Task tool still receives `opus`/`sonnet`/`haiku` — the LiteLLM proxy maps these to configured providers
-- Check that `ANTHROPIC_BASE_URL=http://localhost:4000` is set; if not, warn the user before running any agents
-
 Report current state to the user:
 
 ```
@@ -75,7 +52,7 @@ For each task/plan in the current phase:
 
 For each plan in the phase:
 1. Read the plan from `docs/plans/`
-2. If `config.json` has `workflow.plan_check: true`, run `plan-checker` agent (model: M_VERIFY)
+2. If `config.json` has `workflow.plan_check: true`, run `plan-checker` agent
 3. Invoke `orchestrator.md` to run the task loop (Plan → Work → Review → Compound)
 4. After task loop completes, update `.planning/STATE.md` with progress
 
@@ -91,7 +68,7 @@ When `parallelization.enabled: true`:
 
 After all plans in a phase are complete:
 
-1. If `config.json` has `workflow.verifier: true`, run `verification-agent` at Levels 1-4 (model: M_VERIFY)
+1. If `config.json` has `workflow.verifier: true`, run `verification-agent` at Levels 1-4
 2. Check ROADMAP.md success criteria for the phase — are they met?
 3. Update `.planning/STATE.md` — mark phase status
 

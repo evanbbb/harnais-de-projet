@@ -1,8 +1,8 @@
 # harnais_de_projet
 
-`harnais_de_projet` is a reusable agent workflow harness for AI-driven software engineering. It provides two layers of orchestration:
+`harnais_de_projet` is a reusable agent workflow harness for AI-driven software engineering. It provides two layers of orchestration.
 
-## Two-Layer Model
+## Two-Layer Workflow
 
 ### Task Level (standalone)
 
@@ -49,4 +49,4 @@ Entry point: `project-orchestrator.md` (requires `.planning/` directory)
 - **Agents** — Autonomous prompts for the Task tool (research, analyze, validate)
 - **Skills** — Step-by-step processes with templates and decision points
 - **References** — Standalone docs that agents and skills point to for methodology
-- **`.planning/`** — Optional project lifecycle artifacts (PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md, config.json)
+- **`.planning/`** — Optional project lifecycle artifacts (`PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`, `config.json`)
