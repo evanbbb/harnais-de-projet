@@ -144,6 +144,26 @@ This is only needed when the template itself has meaningful structural changes, 
 
 ---
 
+## If using Claude Code + get-shit-done
+
+`get-shit-done` commands run via `npx` and need explicit Claude Code permission in each consuming repo.
+
+Check:
+
+```bash
+rg -n "Bash\\(npx get-shit-done-cc@latest:\\*\\)" .claude/settings.local.json
+```
+
+If missing, add this allow entry under `.claude/settings.local.json`:
+
+```json
+"Bash(npx get-shit-done-cc@latest:*)"
+```
+
+This permission is repo-local. Adding it in harnais_de_projet does not automatically grant it in other repos.
+
+---
+
 ## If the symlink is broken
 
 If `docs/harness/orchestrator.md` is not accessible, the symlink may be pointing to a path that no longer exists (e.g., harnais_de_projet was moved).

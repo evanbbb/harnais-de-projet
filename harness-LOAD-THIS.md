@@ -21,7 +21,7 @@ Does this project need project lifecycle management?
 Which? (1 / 2)
 ```
 
-If **yes**: After completing all steps below, also copy `00_init/`, `05_session/`, and `project-orchestrator.md` to `docs/harness/`, and run the `00_init/INIT_PHASE.md` to create `.planning/`.
+If **yes**: After completing all steps below, run `docs/harness/00_init/INIT_PHASE.md` to create `.planning/`.
 
 If **no**: Proceed with the standard setup below. The project lifecycle can be added later.
 
@@ -155,7 +155,15 @@ For files that don't map cleanly, skip them. Do not invent new locations or crea
 
 ## Step 4: Configure
 
-Create `docs/harness.md` using the template from `harness-template.md` in harnais_de_projet. The template points to the local copy at `docs/harness`; no path replacement is needed.
+Create `docs/harness.md` using the template from `harness-template.md` in harnais_de_projet. The template points to the harness symlink at `docs/harness`; no path replacement is needed.
+
+If the project uses Claude Code and wants `get-shit-done` commands, ensure `.claude/settings.local.json` includes this permission:
+
+```json
+"Bash(npx get-shit-done-cc@latest:*)"
+```
+
+If `.claude/settings.local.json` does not exist yet, create it with a minimal allow-list and include the permission above.
 
 ---
 
@@ -184,6 +192,7 @@ After completing all steps, confirm:
 - [ ] `docs/harness.md` exists and points to the harness at `docs/harness`
 - [ ] No files were moved without user confirmation
 - [ ] Existing documentation was preserved (moved, not deleted)
+- [ ] If using Claude Code + `get-shit-done`, `.claude/settings.local.json` allows `Bash(npx get-shit-done-cc@latest:*)`
 
 **If project lifecycle was selected:**
 - [ ] `docs/harness/project-orchestrator.md`, `docs/harness/00_init/`, `docs/harness/05_session/` are accessible via the symlink

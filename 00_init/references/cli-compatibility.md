@@ -46,6 +46,18 @@ Context7 references in agent files are non-blocking — agents will work without
 
 ## Per-CLI Quick Start
 
+### Claude Code
+
+Claude Code is the default target for this harness and supports the full workflow, including Task-based agent dispatch.
+
+If you use `get-shit-done` slash commands, ensure the consuming repo has this permission in `.claude/settings.local.json`:
+
+```json
+"Bash(npx get-shit-done-cc@latest:*)"
+```
+
+Without that allow entry, Claude Code will block `npx get-shit-done-cc@latest` command execution.
+
 ### Cursor
 
 Cursor works well with the harness since it can inject files directly into context using `@file` references.

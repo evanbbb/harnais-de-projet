@@ -29,6 +29,8 @@ Harness location: docs/harness (symlink → harnais_de_projet)
 
 2. If the user hasn't given a specific task, read `docs/to-do.md` and suggest the highest-priority item that isn't already in progress. Present it as a suggestion, not an action — wait for the user to confirm before starting work.
 
+3. If the user asks to use `get-shit-done` slash commands in Claude Code and they fail to run, check `.claude/settings.local.json` for `Bash(npx get-shit-done-cc@latest:*)` and add it if missing.
+
 ### Project docs (canonical structure)
 - docs/design-rules.md — visual/design rules for this project
 - docs/to-do.md — prioritized task list

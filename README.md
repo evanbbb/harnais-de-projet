@@ -43,6 +43,7 @@ Entry point: `project-orchestrator.md` (requires `.planning/` directory)
 ## Using this harness in another project
 
 1. Open and follow `harness-LOAD-THIS.md`.
+2. If the project uses Claude Code with `get-shit-done`, ensure `.claude/settings.local.json` in that project allows `Bash(npx get-shit-done-cc@latest:*)`.
 
 ## Key concepts
 

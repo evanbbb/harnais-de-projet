@@ -2,7 +2,7 @@
 
 **Plan → Work → Review → Compound → Repeat**
 
-harnais_de_projet is a collection of agent specs and skills that implement a compound engineering workflow. It lives separate from any project repo. When applying the harness to a project, the onboarding process copies the orchestrator and phase folders into the project (under `docs/harness/`); the project then references that local copy via `docs/harness.md`.
+harnais_de_projet is a collection of agent specs and skills that implement a compound engineering workflow. It lives separate from any project repo. When applying the harness to a project, the onboarding process creates a symlink from `docs/harness` to harnais_de_projet; the project then references that path via `docs/harness.md`.
 
 ### Two-Layer Orchestration
 
@@ -41,11 +41,12 @@ Traditional development accumulates technical debt — every feature adds comple
 ### How Consuming Projects Integrate
 
 1. Run the onboarding process described in `harness-LOAD-THIS.md` (harness init).
-2. Onboarding copies the orchestrator and phase folders from harnais_de_projet into the project at `docs/harness/`, and creates `docs/harness.md` pointing to that local copy.
+2. Onboarding creates `docs/harness` as a symlink to harnais_de_projet, and creates `docs/harness.md` pointing to that symlink.
 3. The project's `CLAUDE.md` (or similar) includes: `Read docs/harness.md for agent workflow instructions`.
 4. Agents and skills are invoked by reading the relevant `.md` file from `docs/harness/` (e.g. `docs/harness/orchestrator.md`, `docs/harness/01_plan/agents/...`).
+5. If the project uses Claude Code with `get-shit-done` commands, ensure `.claude/settings.local.json` allows `Bash(npx get-shit-done-cc@latest:*)` in that consuming repo.
 
-To update the harness in a consuming project, follow `harness-CHECK-4-UPDATES.md` — it walks through copying new/updated agents and skills, design rules, and other harness files, with confirmation before each change.
+To update the harness in a consuming project, follow `harness-CHECK-4-UPDATES.md` — it covers symlink migrations, template refreshes, and Claude Code permission checks for optional `get-shit-done` usage.
 
 See `harness-LOAD-THIS.md` for full onboarding steps.
 
@@ -95,7 +96,7 @@ harnais_de_projet/
 
 ## Consuming Project Structure
 
-Projects that use harnais_de_projet should have the following docs structure. The `harness-LOAD-THIS.md` onboarding process creates this automatically (including copying the harness into `docs/harness/`):
+Projects that use harnais_de_projet should have the following docs structure. The `harness-LOAD-THIS.md` onboarding process creates this automatically (including linking `docs/harness` to harnais_de_projet):
 
 ```
 project-root/
@@ -110,7 +111,7 @@ project-root/
 │   └── phases/                   # Per-phase artifacts
 ├── docs/
 │   ├── harness.md                # Points to local docs/harness/
-│   ├── harness/                  # Local copy of orchestrator and phase folders
+│   ├── harness/                  # Symlink to harnais_de_projet
 │   │   ├── orchestrator.md
 │   │   ├── project-orchestrator.md
 │   │   ├── 00_init/              # Project initialization (optional)
@@ -133,7 +134,7 @@ When `.planning/` exists, the `project-orchestrator.md` drives phase-by-phase ex
 
 ### File Descriptions
 
-- **harness.md** — The bridge between the project and the harness. Points to the local copy at `docs/harness/` and explains how to invoke agents and skills.
+- **harness.md** — The bridge between the project and the harness. Points to the symlinked harness path at `docs/harness/` and explains how to invoke agents and skills.
 - **design-rules.md** — Design rules for the project. Updated when visual components change.
 - **to-do.md** — Loose to-do list organized by priority (P1, P2, etc.).
 - **memory/** — Working memory between context windows. Used during bug investigations or multi-session tasks. After a bug is solved, the solution moves to `solutions/`.
